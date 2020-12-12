@@ -30,12 +30,13 @@ export class DictionaryService implements IDictionaryService {
 		}
 
 		const lines = await this.filesService.readAllLines(dictionaryPath);
-		this.mapLines(lines);
+		lines.map((line: string) => this.dictionary.set(line, line));
 	}
 
 	async search(term: string, options?: SearchOptions): Promise<string[]> {
 		const { caseSensitive, matchAllChars } = options ?? {};
 		term = caseSensitive ? term : term.toLowerCase();
+		term = sortText(term);
 
 		const matchingKeys = this.findMatchingKeys(term, caseSensitive);
 		const results = matchingKeys.map((key: string) => this.dictionary.get(key)) as string[];
@@ -43,21 +44,13 @@ export class DictionaryService implements IDictionaryService {
 		return results;
 	}
 
-	private mapLines(lines: string[]): void {
-		lines.map((line: string, index: number) => {
-			line = line.trim();
-			const sortedLine = sortText(line);
-
-			this.dictionary.set(sortedLine, line);
-		});
-	}
-
 	private findMatchingKeys(term: string, caseSensitive?: boolean): string[] {
 		const matchingKeys: string[] = [];
 
 		let keys = Array.from(this.dictionary.keys());
 		keys.forEach((key: string) => {
-			const compareKey = caseSensitive ? key.valueOf() : key.valueOf().toLowerCase();
+			let compareKey: string = caseSensitive ? key.valueOf() : key.valueOf().toLowerCase();
+			compareKey = sortText(compareKey);
 
 			if (compareKey === term) {
 				matchingKeys.push(key);

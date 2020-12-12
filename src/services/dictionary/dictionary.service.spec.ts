@@ -42,13 +42,10 @@ describe('DictionaryService', () => {
 			expect(existsResult).rejects.toThrow('Invalid operation');
 		});
 
-		it('should trim and map correctly the received array items to the dictionary', async () => {
-			const receivedArray: string[] = ['   $   ', '   $$   ', '   %   '];
+		it('should map correctly the received array items to the dictionary', async () => {
+			const receivedArray: string[] = ['$', '$$', '%'];
 			const expectedDictionary = new Map<string, string>();
-			receivedArray.forEach((item: string) => {
-				item = item.trim();
-				expectedDictionary.set(item, item);
-			});
+			receivedArray.map((item: string) => expectedDictionary.set(item, item));
 			filesServiceMock.exists.calledWith(filePath).mockResolvedValue(true);
 			filesServiceMock.isFile.calledWith(filePath).mockResolvedValue(true);
 			filesServiceMock.readAllLines.calledWith(filePath).mockResolvedValue(receivedArray);

@@ -58,10 +58,9 @@ export class AnagramsProgramService implements IAnagramsProgramService {
 	async run(): Promise<void> {
 		while (this._continue) {
 			const { term } = await this.interactionService.ask(this.askForTermQuestion);
-			const sortedTerm: string = sortText(term).trim();
 
 			const searchResults: string[] = await this.disctionaryService.search(
-				sortedTerm,
+				term,
 				this.searchOptions,
 			);
 
