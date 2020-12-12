@@ -1,1 +1,1 @@
-export * from './read-dictionary-options.model';
+export * from './search-options.model';

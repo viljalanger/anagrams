@@ -1,4 +1,4 @@
-export interface ReadDictionaryOptions {
+export interface SearchOptions {
 	caseSensitive?: boolean;
 	matchAllChars?: boolean;
 }

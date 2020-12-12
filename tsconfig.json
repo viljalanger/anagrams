@@ -10,7 +10,7 @@
 		"importHelpers": true,
 		"target": "es5",
 		"module": "commonjs",
-		"lib": ["es2015", "dom"],
+		"lib": ["es2017", "dom"],
 		"typeRoots": ["node_modules/@types"],
 		"allowJs": true,
 		"outDir": "dist",

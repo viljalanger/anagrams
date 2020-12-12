@@ -10,6 +10,7 @@ describe('DictionaryService', () => {
 	let filesServiceMock: MockProxy<IFilesService>;
 
 	const filePath = 'file/path.txt';
+	const lines = ['Abc', 'aBc', 'abC'];
 
 	const container = InjectorService.getContainer();
 
@@ -54,6 +55,42 @@ describe('DictionaryService', () => {
 			await sut.read(filePath);
 
 			expect(sut.dictionary).toEqual(expectedDictionary);
+		});
+	});
+
+	describe('search', () => {
+		beforeEach(async () => {
+			filesServiceMock.readAllLines.mockResolvedValue(lines);
+			filesServiceMock.exists.mockResolvedValue(true);
+			filesServiceMock.isFile.mockResolvedValue(true);
+
+			await sut.read(filePath);
+		});
+
+		it('should return an empty array when no match is found', async () => {
+			const term = 'def';
+
+			const results = await sut.search(term);
+
+			expect(results).toEqual([]);
+		});
+
+		it('should match all words with same chars ignoring case when called with caseSensitive false', async () => {
+			const options = { caseSensitive: false };
+			const term = 'aBc';
+
+			const results = await sut.search(term, options);
+
+			expect(results).toEqual(lines);
+		});
+
+		it('should match only exact case word when called with caseSensitive true', async () => {
+			const options = { caseSensitive: true };
+			const term = 'aBc';
+
+			const results = await sut.search(term, options);
+
+			expect(results).toEqual([term]);
 		});
 	});
 
