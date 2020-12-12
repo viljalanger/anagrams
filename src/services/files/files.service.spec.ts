@@ -6,19 +6,16 @@ import { InjectorService } from '../injector/injector.service';
 import { IFilesService } from './files.service';
 
 describe('FilesService', () => {
-	const testFilePath = join(process.cwd(), 'test-assets/file.txt');
-	const fakeFilePath = 'fake/file/path.txt';
-
+	let sut: IFilesService;
 	const accessSpy = jest.spyOn(fs.promises, 'access');
 	const lstatSpy = jest.spyOn(fs.promises, 'lstat');
 
+	const testFilePath = join(process.cwd(), 'test-assets/file.txt');
+	const fakeFilePath = 'fake/file/path.txt';
+
 	const container = InjectorService.getContainer();
-	let sut: IFilesService;
 
 	beforeEach(() => {
-		accessSpy.mockReset();
-		lstatSpy.mockReset();
-
 		sut = container.get<IFilesService>('FilesService');
 	});
 
@@ -50,7 +47,7 @@ describe('FilesService', () => {
 		});
 	});
 
-	describe('readAllLines', () => {
+	describe('isFile', () => {
 		it('should call promises.lstat with expected parameter', async () => {
 			lstatSpy.mockResolvedValue(new fs.Stats());
 
@@ -68,5 +65,10 @@ describe('FilesService', () => {
 
 			expect(lines).toEqual(expectedArray);
 		});
+	});
+
+	afterEach(() => {
+		accessSpy.mockReset();
+		lstatSpy.mockReset();
 	});
 });

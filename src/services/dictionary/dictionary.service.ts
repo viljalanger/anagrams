@@ -4,27 +4,28 @@ import { inject, injectable } from 'inversify';
 import { IFilesService } from '../files/files.service';
 
 export interface IDictionaryService {
+	dictionary: Map<string, string>;
 	read(dictionaryPath: string): Promise<void>;
 }
 
 @injectable()
 export class DictionaryService implements IDictionaryService {
-	@inject('FilesService') private readonly files!: IFilesService;
+	@inject('FilesService') private readonly filesService!: IFilesService;
 
-	private dictionary: Map<string, string> = new Map();
+	dictionary: Map<string, string> = new Map();
 
 	async read(dictionaryPath: string, caseSesitive?: boolean): Promise<void> {
-		const existsPath = await this.files.exists(dictionaryPath);
+		const existsPath = await this.filesService.exists(dictionaryPath);
 		if (!existsPath) {
-			throw new Error('Path does not exist');
+			throw new Error('File does not exist');
 		}
 
-		const isFile = await this.files.isFile(dictionaryPath);
+		const isFile = await this.filesService.isFile(dictionaryPath);
 		if (!isFile) {
-			throw new Error('Invalid operation');
+			throw new Error('Invalid operations');
 		}
 
-		const lines = await this.files.readAllLines(dictionaryPath);
+		const lines = await this.filesService.readAllLines(dictionaryPath);
 		this.mapLines(lines);
 	}
 
