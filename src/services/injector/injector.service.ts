@@ -1,12 +1,16 @@
-import { Container } from 'inversify';
+import { Container, ContainerModule } from 'inversify';
+import { Logger } from 'tslog';
 import {
 	AnagramsProgramService,
 	IAnagramsProgramService,
 } from '../anagrams-program/anagrams-program.service';
 
+import { environment } from '@anagrams/environment';
+
 import { DictionaryService, IDictionaryService } from '../dictionary/dictionary.service';
 import { FilesService, IFilesService } from '../files/files.service';
 import { IInteractionService, InteractionService } from '../interaction/interaction.service';
+import { ILoggerService, LoggerService } from '../logger/logger.service';
 
 export class InjectorService {
 	container: Container;
@@ -22,12 +26,31 @@ export class InjectorService {
 	}
 
 	private configure(): void {
-		this.container.bind<IFilesService>('FilesService').to(FilesService);
-		this.container.bind<IDictionaryService>('DictionaryService').to(DictionaryService);
-		this.container.bind<IInteractionService>('InteractionService').to(InteractionService);
+		const thirdPartyDependencies = this.getThirdPartyDependencies();
+		const applicationDependencies = this.getApplicationDependencies();
 
-		this.container
-			.bind<IAnagramsProgramService>('AnagramsProgramService')
-			.to(AnagramsProgramService);
+		this.container.load(thirdPartyDependencies, applicationDependencies);
+	}
+
+	private getApplicationDependencies(): ContainerModule {
+		return new ContainerModule((bind) => {
+			this.container.bind<IFilesService>('FilesService').to(FilesService);
+			this.container.bind<IDictionaryService>('DictionaryService').to(DictionaryService);
+			this.container.bind<IInteractionService>('InteractionService').to(InteractionService);
+
+			this.container
+				.bind<IAnagramsProgramService>('AnagramsProgramService')
+				.to(AnagramsProgramService);
+
+			this.container.bind<ILoggerService>('LoggerService').to(LoggerService);
+		});
+	}
+
+	private getThirdPartyDependencies(): ContainerModule {
+		const logger = new Logger({ displayFilePath: 'hidden', ...environment.logger.tslogSettings });
+
+		return new ContainerModule((bind) => {
+			bind<Logger>('Logger').toConstantValue(logger);
+		});
 	}
 }

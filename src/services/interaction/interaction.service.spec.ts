@@ -1,23 +1,28 @@
+import { mock, MockProxy, mockReset } from 'jest-mock-extended';
 import prompts from 'prompts';
 
 import { InjectorService } from '../injector/injector.service';
+import { ILoggerService } from '../logger/logger.service';
 import { IInteractionService } from './interaction.service';
 
 jest.mock('prompts');
 
 describe('InteractionService', () => {
 	let sut: IInteractionService;
-
-	const logSpy = jest.spyOn(console, 'log');
+	let loggerServiceMock: MockProxy<ILoggerService>;
 
 	const container = InjectorService.getContainer();
 
 	beforeEach(() => {
+		loggerServiceMock = mock<ILoggerService>();
+
+		container.rebind<ILoggerService>('LoggerService').toConstantValue(loggerServiceMock);
+
 		sut = container.get<IInteractionService>('InteractionService');
 	});
 
 	afterEach(() => {
-		logSpy.mockReset();
+		mockReset(loggerServiceMock);
 	});
 
 	it('should be defined', () => {
@@ -25,12 +30,12 @@ describe('InteractionService', () => {
 	});
 
 	describe('say', () => {
-		it('should call console.log with expected parameter', async () => {
+		it('should call logger with expected parameter', async () => {
 			const message = 'I am the message';
 
 			await sut.say(message);
 
-			expect(console.log).toHaveBeenCalledWith(message);
+			expect(loggerServiceMock.info).toHaveBeenCalledWith(message);
 		});
 	});
 
