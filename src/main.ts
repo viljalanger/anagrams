@@ -1,23 +1,15 @@
-import { performance } from 'perf_hooks';
-
 import 'reflect-metadata';
 
-import { InjectorService, TYPES, IDictionaryService } from '@anagrams/services';
-const short = 'assets/short-wordlist.txt';
-const PATH = 'assets/wordlist.txt';
-const loops = 1;
+import { InjectorService } from '@anagrams/services';
+import { IAnagramsProgramService } from './services/anagrams-program/anagrams-program.service';
+import { environment } from './environments';
+
+const dictionaryPath = environment.dictionaryPath;
+
+const container = InjectorService.getContainer();
+const anagramsProgramService = container.get<IAnagramsProgramService>('AnagramsProgramService');
 
 (async () => {
-	const container = InjectorService.getContainer();
-	const dictionaryService = container.get<IDictionaryService>('DictionaryService');
-	const times: number[] = [];
-	for (let index = 0; index < loops; index++) {
-		const t0 = performance.now();
-		const arr = await dictionaryService.read(short);
-		const t1 = performance.now();
-		const time = t1 - t0;
-		times.push(time);
-		console.log(`time: ${t1 - t0}`);
-	}
-	console.log(`average: ${times.reduce((a, v, i) => (a * i + v) / (i + 1))}`);
+	await anagramsProgramService.init(dictionaryPath);
+	await anagramsProgramService.run();
 })();
