@@ -1,17 +1,30 @@
 {
 	"compilerOptions": {
+		"rootDir": ".",
+		"sourceMap": true,
+		"declaration": false,
+		"moduleResolution": "node",
+		"esModuleInterop": true,
+		"emitDecoratorMetadata": true,
+		"experimentalDecorators": true,
+		"importHelpers": true,
 		"target": "es5",
 		"module": "commonjs",
-		"lib": ["es6"],
+		"lib": ["es2015", "dom"],
+		"typeRoots": ["node_modules/@types"],
 		"allowJs": true,
 		"outDir": "dist",
-		"rootDir": "src",
 		"strict": true,
 		"noImplicitAny": true,
 		"baseUrl": ".",
-		"esModuleInterop": true,
 		"resolveJsonModule": true,
 		"skipLibCheck": true,
-		"forceConsistentCasingInFileNames": true
-	}
+		"skipDefaultLibCheck": true,
+		"forceConsistentCasingInFileNames": true,
+		"paths": {
+			"@anagrams/models": ["src/models/index.ts"],
+			"@anagrams/services": ["src/services/index.ts"]
+		}
+	},
+	"exclude": ["node_modules", "tmp"]
 }

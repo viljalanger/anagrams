@@ -1,0 +1,5 @@
+{
+	"triggerTaskOnSave.tasks": {
+		"Run current test file": ["**/*.spec.ts"]
+	}
+}
