@@ -22,6 +22,10 @@ describe('DictionaryService', () => {
 		sut = container.get<IDictionaryService>('DictionaryService');
 	});
 
+	afterEach(() => {
+		mockReset(filesServiceMock);
+	});
+
 	it('should be defined', () => {
 		expect(sut).toBeDefined();
 	});
@@ -108,9 +112,5 @@ describe('DictionaryService', () => {
 
 			expect(results).toEqual(['aBc']);
 		});
-	});
-
-	afterEach(() => {
-		mockReset(filesServiceMock);
 	});
 });

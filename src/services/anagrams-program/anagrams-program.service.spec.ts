@@ -31,6 +31,11 @@ describe('AnagramsProgramService', () => {
 		sut = container.get<IAnagramsProgramService>('AnagramsProgramService');
 	});
 
+	afterEach(() => {
+		mockReset(interactionServiceMock);
+		mockReset(dictionaryServiceMock);
+	});
+
 	describe('init', () => {
 		it('should call dictionary.read with expected parameter', async () => {
 			const filePath = 'file/path.txt';
@@ -127,10 +132,5 @@ describe('AnagramsProgramService', () => {
 			expect(sut.continue).toEqual(newSearchAnswer.doNewSearch);
 			expect(interactionServiceMock.say).lastCalledWith(closingCommand);
 		});
-	});
-
-	afterEach(() => {
-		mockReset(interactionServiceMock);
-		mockReset(dictionaryServiceMock);
 	});
 });

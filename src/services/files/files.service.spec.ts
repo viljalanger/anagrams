@@ -19,6 +19,11 @@ describe('FilesService', () => {
 		sut = container.get<IFilesService>('FilesService');
 	});
 
+	afterEach(() => {
+		accessSpy.mockReset();
+		lstatSpy.mockReset();
+	});
+
 	it('should be defined', () => {
 		expect(sut).toBeDefined();
 	});
@@ -65,10 +70,5 @@ describe('FilesService', () => {
 
 			expect(lines).toEqual(expectedArray);
 		});
-	});
-
-	afterEach(() => {
-		accessSpy.mockReset();
-		lstatSpy.mockReset();
 	});
 });

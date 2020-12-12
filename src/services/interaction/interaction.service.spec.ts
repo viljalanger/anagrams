@@ -16,6 +16,10 @@ describe('InteractionService', () => {
 		sut = container.get<IInteractionService>('InteractionService');
 	});
 
+	afterEach(() => {
+		logSpy.mockReset();
+	});
+
 	it('should be defined', () => {
 		expect(sut).toBeDefined();
 	});
@@ -49,9 +53,5 @@ describe('InteractionService', () => {
 
 			expect(prompts).toBeCalledWith(questions);
 		});
-	});
-
-	afterEach(() => {
-		logSpy.mockReset();
 	});
 });
