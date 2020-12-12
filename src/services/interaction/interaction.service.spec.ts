@@ -7,7 +7,7 @@ jest.mock('prompts');
 
 describe('InteractionService', () => {
 	let sut: IInteractionService;
-	const wrapper = { prompts };
+
 	const logSpy = jest.spyOn(console, 'log');
 
 	const container = InjectorService.getContainer();

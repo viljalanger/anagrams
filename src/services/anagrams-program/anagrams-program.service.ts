@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import { inject, injectable } from 'inversify';
 
 import { SearchOptions } from '@anagrams/models';
@@ -5,10 +6,14 @@ import { sortText } from '@anagrams/utils';
 
 import { IDictionaryService } from '../dictionary/dictionary.service';
 import { IInteractionService } from '../interaction/interaction.service';
+import { formatResults } from '@anagrams/utils';
 import { askForTermQuestion, initQuestions, newSearchQuestion } from './program-questions';
+import { closingCommand, matchNotFoundCommand } from './program-commands';
 
 export interface IAnagramsProgramService {
 	searchOptions: SearchOptions;
+	continue: boolean;
+
 	init(dictionaryPath: string): Promise<void>;
 	run(): Promise<void>;
 }
@@ -22,11 +27,18 @@ export class AnagramsProgramService implements IAnagramsProgramService {
 	private readonly initQuestions = initQuestions;
 	private readonly newSearchQuestion = newSearchQuestion;
 
-	private _searchOptions!: SearchOptions;
-	private continue: boolean = true;
+	private readonly closingCommand = closingCommand;
+	private readonly matchNotFoundCommand = matchNotFoundCommand;
 
-	public get searchOptions(): SearchOptions {
+	private _searchOptions!: SearchOptions;
+	private _continue: boolean = true;
+
+	get searchOptions(): SearchOptions {
 		return this._searchOptions;
+	}
+
+	get continue(): boolean {
+		return this._continue;
 	}
 
 	async init(dictionaryPath: string): Promise<void> {
@@ -43,7 +55,7 @@ export class AnagramsProgramService implements IAnagramsProgramService {
 	}
 
 	async run(): Promise<void> {
-		while (this.continue) {
+		while (this._continue) {
 			const { term } = await this.interactionService.ask(this.askForTermQuestion);
 			const sortedTerm: string = sortText(term).trim();
 
@@ -53,18 +65,16 @@ export class AnagramsProgramService implements IAnagramsProgramService {
 			);
 
 			if (searchResults && searchResults.length > 0) {
-				await this.interactionService.say(`This is what I found: ${searchResults.join(', ')}`);
+				await this.interactionService.say(formatResults(searchResults));
 			} else {
-				await this.interactionService.say(
-					'Sorry, I did not find any result for the term you were looking for',
-				);
+				await this.interactionService.say(this.matchNotFoundCommand);
 			}
 
 			const { doNewSearch } = await this.interactionService.ask(this.newSearchQuestion);
-			this.continue = doNewSearch;
+			this._continue = doNewSearch;
 
-			if (this.continue) {
-				await this.interactionService.say('Goodbye!');
+			if (!this._continue) {
+				await this.interactionService.say(this.closingCommand);
 			}
 		}
 	}

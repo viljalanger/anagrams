@@ -1,11 +1,14 @@
 import 'reflect-metadata';
 import { mock, mockReset, MockProxy } from 'jest-mock-extended';
 
+import { formatResults } from '@anagrams/utils';
+
 import { IAnagramsProgramService } from './anagrams-program.service';
 import { IInteractionService } from '../interaction/interaction.service';
 import { IDictionaryService } from '../dictionary/dictionary.service';
 import { InjectorService } from '../injector/injector.service';
-import { initQuestions } from './program-questions';
+import { askForTermQuestion, initQuestions, newSearchQuestion } from './program-questions';
+import { closingCommand, matchNotFoundCommand } from './program-commands';
 
 describe('AnagramsProgramService', () => {
 	let sut: IAnagramsProgramService;
@@ -47,6 +50,82 @@ describe('AnagramsProgramService', () => {
 			await sut.init(filePath);
 
 			expect(sut.searchOptions).toEqual(initAnswers);
+		});
+	});
+
+	describe('run', () => {
+		it('should read search term and pass it to dictionary.search as expected ', async () => {
+			const termAnswer = { term: 'abc' };
+			const newSearchAnswer = { doNewSearch: false };
+			interactionServiceMock.ask
+				.calledWith(askForTermQuestion as any)
+				.mockResolvedValue(termAnswer);
+			interactionServiceMock.ask
+				.calledWith(newSearchQuestion as any)
+				.mockResolvedValue(newSearchAnswer);
+
+			await sut.run();
+
+			expect(dictionaryServiceMock.search).toHaveBeenCalledWith(termAnswer.term, sut.searchOptions);
+		});
+
+		it('should print results as expected when matches are found', async () => {
+			const searchResults = ['abc', 'abc'];
+			const termAnswer = { term: 'abc' };
+			const newSearchAnswer = { doNewSearch: false };
+			interactionServiceMock.ask
+				.calledWith(askForTermQuestion as any)
+				.mockResolvedValue(termAnswer);
+			interactionServiceMock.ask
+				.calledWith(newSearchQuestion as any)
+				.mockResolvedValue(newSearchAnswer);
+			dictionaryServiceMock.search
+				.calledWith(termAnswer.term, sut.searchOptions)
+				.mockResolvedValue(searchResults);
+			const expectedResultsCommand = formatResults(searchResults);
+
+			await sut.run();
+
+			expect(interactionServiceMock.say).toHaveBeenCalledWith(expectedResultsCommand);
+		});
+
+		it('should display match not found message when dictionary.search does not return items', async () => {
+			const searchResults: string[] = [];
+			const termAnswer = { term: 'abc' };
+			const newSearchAnswer = { doNewSearch: false };
+			interactionServiceMock.ask
+				.calledWith(askForTermQuestion as any)
+				.mockResolvedValue(termAnswer);
+			interactionServiceMock.ask
+				.calledWith(newSearchQuestion as any)
+				.mockResolvedValue(newSearchAnswer);
+			dictionaryServiceMock.search
+				.calledWith(termAnswer.term, sut.searchOptions)
+				.mockResolvedValue(searchResults);
+
+			await sut.run();
+
+			expect(interactionServiceMock.say).toHaveBeenCalledWith(matchNotFoundCommand);
+		});
+
+		it('should handle quit command correctly and display closing command as expected', async () => {
+			const searchResults: string[] = [];
+			const termAnswer = { term: 'abc' };
+			const newSearchAnswer = { doNewSearch: false };
+			interactionServiceMock.ask
+				.calledWith(askForTermQuestion as any)
+				.mockResolvedValue(termAnswer);
+			interactionServiceMock.ask
+				.calledWith(newSearchQuestion as any)
+				.mockResolvedValue(newSearchAnswer);
+			dictionaryServiceMock.search
+				.calledWith(termAnswer.term, sut.searchOptions)
+				.mockResolvedValue(searchResults);
+
+			await sut.run();
+
+			expect(sut.continue).toEqual(newSearchAnswer.doNewSearch);
+			expect(interactionServiceMock.say).lastCalledWith(closingCommand);
 		});
 	});
 
