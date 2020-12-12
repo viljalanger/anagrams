@@ -5,11 +5,11 @@
 	"description": "",
 	"main": "dist/main.js",
 	"scripts": {
-		"build": "webpack",
-		"build:prod": "npm run build --config webpack.prod.js",
+		"build": "webpack --config webpack.config.js",
 		"start": "npm run nodemon src/main.ts",
 		"nodemon": "node_modules/.bin/nodemon --exec 'node_modules/.bin/ts-node --project tsconfig.json -r tsconfig-paths/register'",
-		"test": "jest --config ./jest.config.js",
+		"test": "node_modules/.bin/jest --config ./jest.config.js",
+		"coverage": "node_modules/.bin/jest --config ./jest.config.js --coverage",
 		"eslint": "eslint \"src/**/*.ts\"",
 		"prettier": "prettier \"**/*.ts\" --write"
 	},

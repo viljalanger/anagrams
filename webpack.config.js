@@ -26,6 +26,15 @@ module.exports = {
 				use: 'ts-loader',
 				exclude: /node_modules/,
 			},
+			{
+				test: /environment\.ts?$/,
+				loader: 'file-replace-loader',
+				options: {
+					condition: true,
+					replacement: path.resolve(__dirname, 'src/environments/environment.prod.ts'),
+					async: true,
+				},
+			},
 		],
 	},
 	resolve: {
