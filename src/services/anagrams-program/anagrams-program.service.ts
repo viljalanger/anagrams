@@ -72,10 +72,8 @@ export class AnagramsProgramService implements IAnagramsProgramService {
 
 			const { doNewSearch } = await this.interactionService.ask(this.newSearchQuestion);
 			this._continue = doNewSearch;
-
-			if (!this._continue) {
-				await this.interactionService.say(this.closingCommand);
-			}
 		}
+
+		await this.interactionService.say(this.closingCommand);
 	}
 }
