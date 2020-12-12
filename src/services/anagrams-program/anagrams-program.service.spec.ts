@@ -34,7 +34,7 @@ describe('AnagramsProgramService', () => {
 	describe('init', () => {
 		it('should call dictionary.read with expected parameter', async () => {
 			const filePath = 'file/path.txt';
-			const initAnswers = { caseSensitive: true, matchAllChars: true };
+			const initAnswers = { caseSensitive: true, exactMatch: true };
 			interactionServiceMock.ask.calledWith(initQuestions).mockResolvedValue(initAnswers);
 
 			await sut.init(filePath);
@@ -44,7 +44,7 @@ describe('AnagramsProgramService', () => {
 
 		it('should set searchOptions from init answers as expected', async () => {
 			const filePath = 'file/path.txt';
-			const initAnswers = { caseSensitive: false, matchAllChars: true };
+			const initAnswers = { caseSensitive: false, exactMatch: true };
 			interactionServiceMock.ask.calledWith(initQuestions).mockResolvedValue(initAnswers);
 
 			await sut.init(filePath);

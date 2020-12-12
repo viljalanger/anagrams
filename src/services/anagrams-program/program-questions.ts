@@ -16,7 +16,7 @@ const initQuestions = [
 	},
 	{
 		type: 'select',
-		name: 'matchAllChars',
+		name: 'exactMatch',
 		message: 'Do you want to have exact match results?',
 		choices: [
 			{ title: 'Yes', description: 'Results will match with all chars.', value: true },

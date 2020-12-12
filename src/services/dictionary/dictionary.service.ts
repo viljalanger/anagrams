@@ -8,6 +8,7 @@ import { IFilesService } from '../files/files.service';
 
 export interface IDictionaryService {
 	dictionary: Map<string, string>;
+
 	read(dictionaryPath: string): Promise<void>;
 	search(term: string, options?: SearchOptions): Promise<string[]>;
 }
@@ -34,25 +35,30 @@ export class DictionaryService implements IDictionaryService {
 	}
 
 	async search(term: string, options?: SearchOptions): Promise<string[]> {
-		const { caseSensitive, matchAllChars } = options ?? {};
+		const { caseSensitive, exactMatch } = options ?? {};
 		term = caseSensitive ? term : term.toLowerCase();
-		term = sortText(term);
 
-		const matchingKeys = this.findMatchingKeys(term, caseSensitive);
+		const matchingKeys = this.findMatchingKeys(term, caseSensitive, exactMatch);
 		const results = matchingKeys.map((key: string) => this.dictionary.get(key)) as string[];
 
 		return results;
 	}
 
-	private findMatchingKeys(term: string, caseSensitive?: boolean): string[] {
+	private findMatchingKeys(term: string, caseSensitive?: boolean, exactMatch?: boolean): string[] {
 		const matchingKeys: string[] = [];
 
 		let keys = Array.from(this.dictionary.keys());
 		keys.forEach((key: string) => {
 			let compareKey: string = caseSensitive ? key.valueOf() : key.valueOf().toLowerCase();
-			compareKey = sortText(compareKey);
+			const termChars: string[] = term.split('');
 
-			if (compareKey === term) {
+			let partialMatch: boolean = false;
+			if (!exactMatch) {
+				partialMatch = termChars.every((char: string) => compareKey.split('').includes(char));
+			}
+
+			compareKey = sortText(compareKey);
+			if (compareKey === term || partialMatch) {
 				matchingKeys.push(key);
 			}
 		});
