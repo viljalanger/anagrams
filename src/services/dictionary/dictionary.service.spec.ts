@@ -74,7 +74,7 @@ describe('DictionaryService', () => {
 		});
 
 		it('should match all words with same chars ignoring case when called with caseSensitive false', async () => {
-			const options = { caseSensitive: false };
+			const options = { caseSensitive: false, exactMath: true };
 			const term = 'aBc';
 
 			const results = await sut.search(term, options);
@@ -83,12 +83,30 @@ describe('DictionaryService', () => {
 		});
 
 		it('should match only exact case word when called with caseSensitive true', async () => {
-			const options = { caseSensitive: true };
+			const options = { caseSensitive: true, exactMath: true };
 			const term = 'aBc';
 
 			const results = await sut.search(term, options);
 
 			expect(results).toEqual([term]);
+		});
+
+		it('should also match words partially ignoring case when called with caseSensitive false and exactMath false', async () => {
+			const options = { caseSensitive: false, exactMath: false };
+			const term = 'ac';
+
+			const results = await sut.search(term, options);
+
+			expect(results).toEqual(lines);
+		});
+
+		it('should not match words partially but consider case when called with caseSensitive true exactMath false', async () => {
+			const options = { caseSensitive: true, exactMath: false };
+			const term = 'aB';
+
+			const results = await sut.search(term, options);
+
+			expect(results).toEqual(['aBc']);
 		});
 	});
 
