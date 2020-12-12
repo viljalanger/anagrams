@@ -1,5 +1,5 @@
 import { promises, createReadStream } from 'fs';
-import { createInterface as createReadLine } from 'readline';
+import { createInterface as createReadLineInterface } from 'readline';
 import { F_OK } from 'constants';
 
 import { injectable } from 'inversify';
@@ -32,7 +32,7 @@ export class FilesService implements IFilesService {
 
 	async readAllLines(filePath: string): Promise<string[]> {
 		const fileStream = createReadStream(filePath);
-		const readLine = createReadLine({ input: fileStream });
+		const readLine = createReadLineInterface({ input: fileStream });
 
 		const lines: string[] = [];
 		for await (const line of readLine) {
