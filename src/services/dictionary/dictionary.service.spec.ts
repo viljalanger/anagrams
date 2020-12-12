@@ -16,6 +16,7 @@ describe('DictionaryService', () => {
 
 	beforeEach(() => {
 		filesServiceMock = mock<IFilesService>();
+
 		container.rebind<IFilesService>('FilesService').toConstantValue(filesServiceMock);
 
 		sut = container.get<IDictionaryService>('DictionaryService');
