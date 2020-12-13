@@ -4,14 +4,10 @@ import { F_OK } from 'constants';
 import { inject, injectable } from 'inversify';
 
 import { Exception } from '@anagrams/models';
-import { ILoggerServiceKey } from '../injector/type-keys';
-import { ILoggerService } from '../logger/logger.service';
 
-export interface IFilesService {
-	exists(filePath: string): Promise<boolean>;
-	isFile(filePath: string): Promise<boolean>;
-	readAllLines(filePath: string): Promise<string[]>;
-}
+import { ILoggerServiceKey } from '../injector/type-keys';
+import { IFilesService } from '../interfaces/files.interface';
+import { ILoggerService } from '../interfaces/logger.interface';
 
 @injectable()
 export class FilesService implements IFilesService {

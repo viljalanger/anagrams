@@ -5,8 +5,8 @@ import fs from 'fs';
 import { F_OK } from 'constants';
 
 import { InjectorService } from '../injector/injector.service';
-import { IFilesService } from './files.service';
 import { IFilesServiceKey } from '../injector/type-keys';
+import { IFilesService } from '../interfaces/files.interface';
 
 describe('FilesService', () => {
 	let sut: IFilesService;

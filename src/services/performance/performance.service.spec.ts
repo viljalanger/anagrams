@@ -3,11 +3,12 @@
 import { performance } from 'perf_hooks';
 import { mock, MockProxy, mockReset } from 'jest-mock-extended';
 
+import { formatPerformanceResult } from '@anagrams/utils';
+
 import { InjectorService } from '../injector/injector.service';
 import { ILoggerServiceKey, IPerformanceServiceKey } from '../injector/type-keys';
-import { ILoggerService } from '../logger/logger.service';
-import { IPerformanceService } from './performance.service';
-import { formatPerformanceResult } from 'src/utils/utils';
+import { ILoggerService } from '../interfaces/logger.interface';
+import { IPerformanceService } from '../interfaces/performance.interface';
 
 describe('PerformanceService', () => {
 	let sut: IPerformanceService;

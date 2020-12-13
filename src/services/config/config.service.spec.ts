@@ -2,7 +2,7 @@ import { environment } from '@anagrams/environment';
 
 import { InjectorService } from '../injector/injector.service';
 import { IConfigServiceKey } from '../injector/type-keys';
-import { IConfigService } from './config.service';
+import { IConfigService } from '../interfaces/config.interface';
 
 describe('ConfigService', () => {
 	let sut: IConfigService;

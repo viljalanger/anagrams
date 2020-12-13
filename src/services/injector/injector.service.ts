@@ -3,15 +3,6 @@ import { Container, ContainerModule } from 'inversify';
 import { Logger } from 'tslog';
 
 import {
-	AnagramsProgramService,
-	IAnagramsProgramService,
-} from '../anagrams-program/anagrams-program.service';
-import { DictionaryService, IDictionaryService } from '../dictionary/dictionary.service';
-import { FilesService, IFilesService } from '../files/files.service';
-import { IInteractionService, InteractionService } from '../interaction/interaction.service';
-import { ILoggerService, LoggerService } from '../logger/logger.service';
-import { IPerformanceService, PerformanceService } from '../performance/performance.service';
-import {
 	IAnagramsProgramServiceKey,
 	IConfigServiceKey,
 	IDictionaryServiceKkey,
@@ -22,7 +13,21 @@ import {
 	LoggerKey,
 	performanceKey,
 } from './type-keys';
-import { ConfigService, IConfigService } from '../config/config.service';
+
+import { AnagramsProgramService } from '../anagrams-program/anagrams-program.service';
+import { DictionaryService } from '../dictionary/dictionary.service';
+import { FilesService } from '../files/files.service';
+import { InteractionService } from '../interaction/interaction.service';
+import { LoggerService } from '../logger/logger.service';
+import { PerformanceService } from '../performance/performance.service';
+import { ConfigService } from '../config/config.service';
+import { IAnagramsProgramService } from '../interfaces/anagrams-program.interface';
+import { IConfigService } from '../interfaces/config.interface';
+import { IDictionaryService } from '../interfaces/dictionary.interface';
+import { IFilesService } from '../interfaces/files.interface';
+import { IInteractionService } from '../interfaces/interaction.interface';
+import { ILoggerService } from '../interfaces/logger.interface';
+import { IPerformanceService } from '../interfaces/performance.interface';
 
 export class InjectorService {
 	private static _container: Container;

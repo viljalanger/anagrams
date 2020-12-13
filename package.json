@@ -17,9 +17,7 @@
 		"eslint": "eslint \"src/**/*.ts\"",
 		"eslint:fix": "npm run eslint --fix",
 		"prettier": "prettier \"**/*.ts\"",
-		"prettier:fix": "npm run prettier --write",
-		"pre-commit-push": "npm run eslint:fix && npm run prettier:fix && npm run test",
-		"prepush": "npm run test"
+		"prettier:fix": "npm run prettier --write"
 	},
 	"author": "Yiyi Chen",
 	"devDependencies": {

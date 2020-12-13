@@ -7,11 +7,8 @@ import { inject, injectable } from 'inversify';
 import { formatPerformanceResult } from '@anagrams/utils';
 
 import { ILoggerServiceKey, performanceKey } from '../injector/type-keys';
-import { ILoggerService } from '../logger/logger.service';
-
-export interface IPerformanceService {
-	measure(functionToMeasure: () => Promise<any>, functionName?: string): Promise<any>;
-}
+import { IPerformanceService } from '../interfaces/performance.interface';
+import { ILoggerService } from '../interfaces/logger.interface';
 
 @injectable()
 export class PerformanceService implements IPerformanceService {

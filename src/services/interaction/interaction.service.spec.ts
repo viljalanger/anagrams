@@ -3,8 +3,8 @@ import prompts from 'prompts';
 
 import { InjectorService } from '../injector/injector.service';
 import { IInteractionServiceKey, ILoggerServiceKey } from '../injector/type-keys';
-import { ILoggerService } from '../logger/logger.service';
-import { IInteractionService } from './interaction.service';
+import { IInteractionService } from '../interfaces/interaction.interface';
+import { ILoggerService } from '../interfaces/logger.interface';
 
 jest.mock('prompts');
 

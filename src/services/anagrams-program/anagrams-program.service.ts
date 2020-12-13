@@ -4,24 +4,18 @@ import { inject, injectable } from 'inversify';
 import { InvalidInputException, SearchOptions } from '@anagrams/models';
 import { formatResults } from '@anagrams/utils';
 
-import { IDictionaryService } from '../dictionary/dictionary.service';
-import { IInteractionService } from '../interaction/interaction.service';
-import { askForTermQuestion, initQuestions, newSearchQuestion } from './program-questions';
-import { closingCommand, invalidTermCommand, matchNotFoundCommand } from './program-commands';
 import {
 	IDictionaryServiceKkey,
 	IInteractionServiceKey,
 	IPerformanceServiceKey,
 } from '../injector/type-keys';
-import { IPerformanceService } from '../performance/performance.service';
 
-export interface IAnagramsProgramService {
-	searchOptions: SearchOptions;
-	continue: boolean;
-
-	init(dictionaryPath: string): Promise<void>;
-	run(): Promise<void>;
-}
+import { askForTermQuestion, initQuestions, newSearchQuestion } from './program-questions';
+import { closingCommand, invalidTermCommand, matchNotFoundCommand } from './program-commands';
+import { IAnagramsProgramService } from '../interfaces/anagrams-program.interface';
+import { IDictionaryService } from '../interfaces/dictionary.interface';
+import { IInteractionService } from '../interfaces/interaction.interface';
+import { IPerformanceService } from '../interfaces/performance.interface';
 
 @injectable()
 export class AnagramsProgramService implements IAnagramsProgramService {

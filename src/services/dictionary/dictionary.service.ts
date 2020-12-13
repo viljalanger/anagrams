@@ -4,15 +4,9 @@ import { inject, injectable } from 'inversify';
 import { sortText } from '@anagrams/utils';
 import { SearchOptions, FileNotFoundException, InvalidOperationException } from '@anagrams/models';
 
-import { IFilesService } from '../files/files.service';
 import { IFilesServiceKey } from '../injector/type-keys';
-
-export interface IDictionaryService {
-	dictionary: Map<string, string>;
-
-	read(dictionaryPath: string): Promise<void>;
-	search(term: string, options?: SearchOptions): Promise<string[]>;
-}
+import { IDictionaryService } from '../interfaces/dictionary.interface';
+import { IFilesService } from '../interfaces/files.interface';
 
 @injectable()
 export class DictionaryService implements IDictionaryService {

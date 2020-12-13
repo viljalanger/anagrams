@@ -1,10 +1,10 @@
 import 'reflect-metadata';
 import { mock, mockReset, MockProxy } from 'jest-mock-extended';
 
-import { IFilesService } from '../files/files.service';
 import { InjectorService } from '../injector/injector.service';
-import { IDictionaryService } from './dictionary.service';
 import { IDictionaryServiceKkey, IFilesServiceKey } from '../injector/type-keys';
+import { IDictionaryService } from '../interfaces/dictionary.interface';
+import { IFilesService } from '../interfaces/files.interface';
 
 describe('DictionaryService', () => {
 	let sut: IDictionaryService;

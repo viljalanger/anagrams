@@ -1,11 +1,12 @@
-import { Exception } from '@anagrams/models';
 import { mock, MockProxy, mockReset } from 'jest-mock-extended';
 import { Logger } from 'tslog';
-import { IConfigService } from '../config/config.service';
+
+import { Exception } from '@anagrams/models';
 
 import { InjectorService } from '../injector/injector.service';
 import { IConfigServiceKey, ILoggerServiceKey, LoggerKey } from '../injector/type-keys';
-import { ILoggerService } from './logger.service';
+import { ILoggerService } from '../interfaces/logger.interface';
+import { IConfigService } from '../interfaces/config.interface';
 
 describe('LoggerService', () => {
 	let sut: ILoggerService;

@@ -1,17 +1,9 @@
 import { inject, injectable } from 'inversify';
 import { Logger } from 'tslog';
-import { IConfigService } from '../config/config.service';
-import { IConfigServiceKey, LoggerKey } from '../injector/type-keys';
 
-export interface ILoggerService {
-	silly(message: string): void;
-	trace(message: string): void;
-	debug(message: string): void;
-	info(message: string): void;
-	warn(message: string): void;
-	error(message: string, errorObj?: Error): void;
-	fatal(errorObj: Error): void;
-}
+import { IConfigServiceKey, LoggerKey } from '../injector/type-keys';
+import { IConfigService } from '../interfaces/config.interface';
+import { ILoggerService } from '../interfaces/logger.interface';
 
 @injectable()
 export class LoggerService implements ILoggerService {

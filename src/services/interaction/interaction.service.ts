@@ -6,13 +6,8 @@ import prompts, { Answers } from 'prompts';
 import { Exception } from '@anagrams/models';
 
 import { ILoggerServiceKey } from '../injector/type-keys';
-import { ILoggerService } from '../logger/logger.service';
-
-export interface IInteractionService {
-	say(message: string): void;
-	ask(questions: any): Promise<Answers<any>>;
-	ask(questions: any[]): Promise<Answers<any>>;
-}
+import { IInteractionService } from '../interfaces/interaction.interface';
+import { ILoggerService } from '../interfaces/logger.interface';
 
 @injectable()
 export class InteractionService implements IInteractionService {

@@ -4,19 +4,20 @@ import 'reflect-metadata';
 import { mock, mockReset, MockProxy } from 'jest-mock-extended';
 
 import { formatResults } from '@anagrams/utils';
+import { InvalidInputException } from '@anagrams/models';
 
-import { IAnagramsProgramService } from './anagrams-program.service';
-import { IInteractionService } from '../interaction/interaction.service';
-import { IDictionaryService } from '../dictionary/dictionary.service';
-import { InjectorService } from '../injector/injector.service';
-import { askForTermQuestion, initQuestions, newSearchQuestion } from './program-questions';
-import { closingCommand, invalidTermCommand, matchNotFoundCommand } from './program-commands';
 import {
 	IAnagramsProgramServiceKey,
 	IDictionaryServiceKkey,
 	IInteractionServiceKey,
 } from '../injector/type-keys';
-import { InvalidInputException } from '@anagrams/models';
+
+import { InjectorService } from '../injector/injector.service';
+import { askForTermQuestion, initQuestions, newSearchQuestion } from './program-questions';
+import { closingCommand, invalidTermCommand, matchNotFoundCommand } from './program-commands';
+import { IAnagramsProgramService } from '../interfaces/anagrams-program.interface';
+import { IDictionaryService } from '../interfaces/dictionary.interface';
+import { IInteractionService } from '../interfaces/interaction.interface';
 
 describe('AnagramsProgramService', () => {
 	let sut: IAnagramsProgramService;

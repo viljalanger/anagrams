@@ -3,11 +3,7 @@ import { injectable } from 'inversify';
 import { environment } from '@anagrams/environment';
 import { TSLogSettings } from '@anagrams/models';
 
-export interface IConfigService {
-	isProduction(): boolean;
-	getDictionaryPath(): string;
-	getTSLogSettings(): TSLogSettings;
-}
+import { IConfigService } from '../interfaces/config.interface';
 
 @injectable()
 export class ConfigService implements IConfigService {
