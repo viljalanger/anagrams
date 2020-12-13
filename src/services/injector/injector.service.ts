@@ -1,3 +1,4 @@
+import { performance, Performance } from 'perf_hooks';
 import { Container, ContainerModule } from 'inversify';
 import { Logger } from 'tslog';
 
@@ -11,13 +12,16 @@ import { DictionaryService, IDictionaryService } from '../dictionary/dictionary.
 import { FilesService, IFilesService } from '../files/files.service';
 import { IInteractionService, InteractionService } from '../interaction/interaction.service';
 import { ILoggerService, LoggerService } from '../logger/logger.service';
+import { IPerformanceService, PerformanceService } from '../performance/performance.service';
 import {
 	IAnagramsProgramServiceKey,
 	IDictionaryServiceKkey,
 	IFilesServiceKey,
 	IInteractionServiceKey,
 	ILoggerServiceKey,
+	IPerformanceServiceKey,
 	LoggerKey,
+	performanceKey,
 } from './type-keys';
 
 export class InjectorService {
@@ -47,6 +51,7 @@ export class InjectorService {
 			bind<IInteractionService>(IInteractionServiceKey).to(InteractionService);
 			bind<IAnagramsProgramService>(IAnagramsProgramServiceKey).to(AnagramsProgramService);
 			bind<ILoggerService>(ILoggerServiceKey).to(LoggerService);
+			bind<IPerformanceService>(IPerformanceServiceKey).to(PerformanceService);
 		});
 	}
 
@@ -55,6 +60,7 @@ export class InjectorService {
 
 		return new ContainerModule((bind) => {
 			bind<Logger>(LoggerKey).toConstantValue(logger);
+			bind<Performance>(performanceKey).toConstantValue(performance);
 		});
 	}
 }
