@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 
+import { Performance } from 'perf_hooks';
 import { inject, injectable } from 'inversify';
 
 import { formatPerformanceResult } from '@anagrams/utils';
@@ -8,20 +10,23 @@ import { ILoggerServiceKey, performanceKey } from '../injector/type-keys';
 import { ILoggerService } from '../logger/logger.service';
 
 export interface IPerformanceService {
-	measure(functionToMeasure: () => any, functionName?: string): Promise<void>;
+	measure(functionToMeasure: () => Promise<any>, functionName?: string): Promise<any>;
 }
 
 @injectable()
-export class PerformanceService {
+export class PerformanceService implements IPerformanceService {
 	@inject(ILoggerServiceKey) private readonly loggerService!: ILoggerService;
 	@inject(performanceKey) private readonly performance!: Performance;
 
-	async measure(functionToMeasure: () => any, functionName?: string): Promise<void> {
+	async measure(functionToMeasure: () => Promise<any>, functionName?: string): Promise<any> {
 		const startTime = this.performance.now();
-		await functionToMeasure();
+		const result = await functionToMeasure();
 		const endTime = this.performance.now();
 
 		const executionTime = endTime - startTime;
-		this.loggerService.debug(formatPerformanceResult(executionTime, functionName));
+		const performanceMessage = formatPerformanceResult(executionTime, functionName ?? functionToMeasure.name);
+		this.loggerService.debug(performanceMessage);
+
+		return result;
 	}
 }

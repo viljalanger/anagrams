@@ -8,7 +8,12 @@ import { IDictionaryService } from '../dictionary/dictionary.service';
 import { IInteractionService } from '../interaction/interaction.service';
 import { askForTermQuestion, initQuestions, newSearchQuestion } from './program-questions';
 import { closingCommand, matchNotFoundCommand } from './program-commands';
-import { IDictionaryServiceKkey, IInteractionServiceKey } from '../injector/type-keys';
+import {
+	IDictionaryServiceKkey,
+	IInteractionServiceKey,
+	IPerformanceServiceKey,
+} from '../injector/type-keys';
+import { IPerformanceService } from '../performance/performance.service';
 
 export interface IAnagramsProgramService {
 	searchOptions: SearchOptions;
@@ -22,6 +27,7 @@ export interface IAnagramsProgramService {
 export class AnagramsProgramService implements IAnagramsProgramService {
 	@inject(IInteractionServiceKey) private readonly interactionService!: IInteractionService;
 	@inject(IDictionaryServiceKkey) private readonly disctionaryService!: IDictionaryService;
+	@inject(IPerformanceServiceKey) private readonly performanceService!: IPerformanceService;
 
 	private readonly askForTermQuestion = askForTermQuestion;
 	private readonly initQuestions = initQuestions;
@@ -45,7 +51,8 @@ export class AnagramsProgramService implements IAnagramsProgramService {
 		this.interactionService.say('Welcome to the anagrams program!');
 		this.interactionService.say('Reading dictionary...');
 
-		await this.disctionaryService.read(dictionaryPath);
+		const readDictionary = async () => await this.disctionaryService.read(dictionaryPath);
+		await this.performanceService.measure(readDictionary, 'Read dictionary');
 
 		this.interactionService.say('Done!');
 		this.interactionService.say(`Imported ${this.disctionaryService.dictionary.size} entries`);
@@ -59,7 +66,10 @@ export class AnagramsProgramService implements IAnagramsProgramService {
 		while (this._continue) {
 			const { term } = await this.interactionService.ask(this.askForTermQuestion);
 
-			const searchResults: string[] = await this.disctionaryService.search(term, this.searchOptions);
+			const searchFunction = async (): Promise<string[]> => {
+				return await this.disctionaryService.search(term, this.searchOptions);
+			};
+			const searchResults: string[] = await this.performanceService.measure(searchFunction, 'Search term');
 
 			if (searchResults && searchResults.length > 0) {
 				await this.interactionService.say(formatResults(searchResults));
