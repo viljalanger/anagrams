@@ -56,7 +56,11 @@ export class InjectorService {
 	}
 
 	private getThirdPartyDependencies(): ContainerModule {
-		const logger = new Logger({ displayFilePath: 'hidden', ...environment.logger.tslogSettings });
+		const logger = new Logger({
+			displayFilePath: 'hidden',
+			minLevel: environment.production ? 'info' : 'silly',
+			...environment.logger.tslogSettings,
+		});
 
 		return new ContainerModule((bind) => {
 			bind<Logger>(LoggerKey).toConstantValue(logger);
