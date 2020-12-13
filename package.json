@@ -13,9 +13,17 @@
 		"coverage": "rimraf ./coverage && jest --config ./jest.config.js --coverage",
 		"coverage:web": "npm run coverage && http-server ./coverage/lcov-report -o",
 		"eslint": "eslint \"src/**/*.ts\"",
-		"prettier": "prettier \"**/*.ts\" --write",
-		"precommit": "npm run eslint && npm run pretteir",
+		"eslint:fix": "npm run eslint --fix",
+		"prettier": "prettier \"**/*.ts\"",
+		"prettir:fix": "npm run prettier --write",
+		"precommit": "npm run eslintLfix && npm run pretteir:fix",
 		"prepush": "npm run test"
+	},
+	"husky": {
+		"hooks": {
+			"pre-commit": "precommit",
+			"pre-push": "prepush"
+		}
 	},
 	"author": "Yiyi Chen",
 	"devDependencies": {
