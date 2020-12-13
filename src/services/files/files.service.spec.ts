@@ -7,6 +7,7 @@ import { F_OK } from 'constants';
 import { IFilesServiceKey, Injector } from '@anagrams/injector';
 
 import { IFilesService } from '../interfaces/files.interface';
+import { Exception } from '@anagrams/models';
 
 describe('FilesService', () => {
 	let sut: IFilesService;
@@ -47,7 +48,7 @@ describe('FilesService', () => {
 		});
 
 		it('should return false when promises.access throws an error', async () => {
-			accessSpy.mockRejectedValue(new Error());
+			accessSpy.mockRejectedValue(new Exception());
 
 			const exists = await sut.exists(fakeFilePath);
 

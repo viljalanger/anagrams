@@ -2,6 +2,7 @@ import { inject, injectable } from 'inversify';
 import { Logger } from 'tslog';
 
 import { IConfigServiceKey, LoggerKey } from '@anagrams/injector';
+import { Exception } from '@anagrams/models';
 
 import { IConfigService } from '../interfaces/config.interface';
 import { ILoggerService } from '../interfaces/logger.interface';
@@ -31,17 +32,17 @@ export class LoggerService implements ILoggerService {
 		this.logger.warn(message);
 	}
 
-	error(message: string, errorObj?: Error): void {
-		this.logger.error(message, errorObj?.message ?? '');
+	error(message: string, exeception?: Exception): void {
+		this.logger.error(message, exeception?.message ?? '');
 
-		if (errorObj) {
-			this.fatal(errorObj);
+		if (exeception) {
+			this.fatal(exeception);
 		}
 	}
 
-	fatal(errorObj: Error): void {
+	fatal(exeception: Exception): void {
 		if (!this.configService.isProduction()) {
-			this.logger.fatal(errorObj);
+			this.logger.fatal(exeception);
 		}
 	}
 }

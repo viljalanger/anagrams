@@ -39,8 +39,8 @@ export class FilesService implements IFilesService {
 			for await (const line of readLine) {
 				lines.push(line);
 			}
-		} catch (errorObj) {
-			this.loggerService.fatal(errorObj);
+		} catch (exeception) {
+			this.loggerService.fatal(exeception);
 
 			throw new Exception('An error occured while reading dictionary lines');
 		} finally {

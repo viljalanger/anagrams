@@ -19,8 +19,8 @@ export class InteractionService implements IInteractionService {
 	async ask(...args: Question[]): Promise<Answers<any>> {
 		try {
 			return await prompts(args);
-		} catch (errorObj) {
-			this.loggerService.fatal(errorObj);
+		} catch (exeception) {
+			this.loggerService.fatal(exeception);
 
 			throw new Exception('An error occured while reading user answers');
 		}

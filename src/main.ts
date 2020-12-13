@@ -7,6 +7,7 @@ import {
 	ILoggerServiceKey,
 } from '@anagrams/injector';
 
+import { Exception } from '@anagrams/models';
 import { IAnagramsProgramService, IConfigService, ILoggerService } from '@anagrams/services';
 
 const container = Injector.getContainer();
@@ -16,8 +17,8 @@ const configService = container.get<IConfigService>(IConfigServiceKey);
 
 const dictionaryPath = configService.getDictionaryPath();
 
-process.on('uncaughtException', (errorObj: Error) => {
-	loggerService.error('Ooops... Somthing went wrong...', errorObj);
+process.on('uncaughtException', (exeception: Exception) => {
+	loggerService.error('Ooops... Somthing went wrong...', exeception);
 
 	process.exit(1);
 });
