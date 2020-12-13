@@ -14,7 +14,8 @@
 		"coverage:web": "npm run coverage && http-server ./coverage/lcov-report -o",
 		"eslint": "eslint \"src/**/*.ts\"",
 		"prettier": "prettier \"**/*.ts\" --write",
-		"precommit": "npm run test && npm run eslint && npm run prettier && npm run build"
+		"precommit": "npm run eslint && npm run pretteir",
+		"prepush": "npm run test"
 	},
 	"author": "Yiyi Chen",
 	"devDependencies": {
