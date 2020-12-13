@@ -31,7 +31,7 @@ export class AnagramsProgramService implements IAnagramsProgramService {
 
 	async init(dictionaryPath: string): Promise<void> {
 		this.interactionService.say('Welcome to the anagrams program!');
-		this.interactionService.say('Reading dictionary...');
+		this.interactionService.say('Reading dictionary, please wait...');
 
 		const readDictionary = async () => await this.disctionaryService.read(dictionaryPath);
 		await this.performanceService.measure(readDictionary, 'Read dictionary');
@@ -55,6 +55,7 @@ export class AnagramsProgramService implements IAnagramsProgramService {
 				throw new InvalidInputException(`Entered input is invalid: ${term}`);
 			}
 
+			this.interactionService.say('Searching for matching words, please wait...');
 			const searchFunction = async (): Promise<string[]> => {
 				return await this.disctionaryService.search(term, this.searchOptions);
 			};
