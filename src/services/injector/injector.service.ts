@@ -25,28 +25,36 @@ import {
 import { ConfigService, IConfigService } from '../config/config.service';
 
 export class InjectorService {
-	container: Container;
+	private static _container: Container;
 
-	constructor() {
-		this.container = new Container();
+	static get container(): Container {
+		return this._container;
+	}
 
-		this.configure();
+	static set container(value: Container) {
+		this._container = value;
 	}
 
 	static getContainer(): Container {
-		return new InjectorService().container;
+		if (!this._container) {
+			this._container = new Container();
+
+			this.configure();
+		}
+
+		return this._container;
 	}
 
-	private configure(): void {
+	private static configure(): void {
 		const applicationDependencies = this.getApplicationDependencies();
-		this.container.load(applicationDependencies);
+		this._container.load(applicationDependencies);
 
-		const configService = this.container.get<IConfigService>(IConfigServiceKey);
+		const configService = this._container.get<IConfigService>(IConfigServiceKey);
 		const thirdPartyDependencies = this.getThirdPartyDependencies(configService);
-		this.container.load(thirdPartyDependencies);
+		this._container.load(thirdPartyDependencies);
 	}
 
-	private getApplicationDependencies(): ContainerModule {
+	private static getApplicationDependencies(): ContainerModule {
 		return new ContainerModule((bind) => {
 			bind<IFilesService>(IFilesServiceKey).to(FilesService);
 			bind<IDictionaryService>(IDictionaryServiceKkey).to(DictionaryService);
@@ -58,7 +66,7 @@ export class InjectorService {
 		});
 	}
 
-	private getThirdPartyDependencies(configService: IConfigService): ContainerModule {
+	private static getThirdPartyDependencies(configService: IConfigService): ContainerModule {
 		const logger = new Logger({
 			displayFilePath: 'hidden',
 			minLevel: configService.isProduction() ? 'info' : 'silly',
