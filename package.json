@@ -16,14 +16,20 @@
 		"eslint:fix": "npm run eslint --fix",
 		"prettier": "prettier \"**/*.ts\"",
 		"prettir:fix": "npm run prettier --write",
-		"precommit": "npm run eslintLfix && npm run pretteir:fix",
+		"precommit": "npm run eslint:fix && npm run pretteir:fix",
 		"prepush": "npm run test"
 	},
 	"husky": {
 		"hooks": {
-			"pre-commit": "precommit",
+			"pre-commit": "lint-staged",
 			"pre-push": "prepush"
 		}
+	},
+	"lint-staged": {
+		"*.{js,json,ts}": [
+			"npm run precommit",
+			"git add"
+		]
 	},
 	"author": "Yiyi Chen",
 	"devDependencies": {
@@ -42,6 +48,7 @@
 		"husky": "^4.3.5",
 		"jest": "^26.6.3",
 		"jest-mock-extended": "^1.0.10",
+		"lint-staged": "^10.5.3",
 		"nodemon": "^2.0.6",
 		"prettier": "^2.2.1",
 		"rimraf": "^2.7.1",
