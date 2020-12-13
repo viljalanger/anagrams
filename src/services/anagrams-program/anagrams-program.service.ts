@@ -66,11 +66,11 @@ export class AnagramsProgramService implements IAnagramsProgramService {
 		while (this._continue) {
 			const { term } = await this.interactionService.ask(this.askForTermQuestion);
 
-			// const searchFunction = async (): Promise<string[]> => {
-			// 	return await this.disctionaryService.search(term, this.searchOptions);
-			// };
-			// const searchResults: string[] = await this.performanceService.measure(searchFunction, 'Search term');
-			const searchResults: string[] = await this.disctionaryService.search(term, this.searchOptions);
+			const searchFunction = async (): Promise<string[]> => {
+				return await this.disctionaryService.search(term, this.searchOptions);
+			};
+			const searchResults: string[] = await this.performanceService.measure(searchFunction, 'Search term');
+
 			if (searchResults && searchResults.length > 0) {
 				await this.interactionService.say(formatResults(searchResults));
 			} else {

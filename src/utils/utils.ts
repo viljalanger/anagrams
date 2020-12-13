@@ -10,7 +10,7 @@ const formatResults = (matches: string[]): string => {
 };
 
 const formatPerformanceResult = (executionTime: number, functionName: string): string => {
-	return `Performance Service | measure | Operation name: [${functionName}] - Execution Time: ${executionTime} ms`;
+	return `PerformanceService | measure | Operation name: [${functionName}] - Execution Time: ${executionTime} ms`;
 };
 
 export { sortText, formatResults, formatPerformanceResult };
