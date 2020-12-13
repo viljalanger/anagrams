@@ -11,8 +11,8 @@
 		"nodemon": "node_modules/.bin/nodemon --exec 'node_modules/.bin/ts-node --project tsconfig.json -r tsconfig-paths/register'",
 		"test": "node_modules/.bin/jest --config ./jest.config.js",
 		"coverage": "node_modules/.bin/jest --config ./jest.config.js --coverage",
-		"eslint": "eslint \"src/**/*.ts\"",
-		"prettier": "prettier \"**/*.ts\" --write"
+		"eslint": "node_modules/.bin/eslint \"src/**/*.ts\"",
+		"prettier": "node_modules/.bin/prettier \"**/*.ts\" --write"
 	},
 	"author": "Yiyi Chen",
 	"devDependencies": {
