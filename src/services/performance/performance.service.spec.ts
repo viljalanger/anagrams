@@ -33,7 +33,7 @@ describe('PerformanceService', () => {
 	});
 
 	describe('measure', () => {
-		it('should log with debug correct given time', () => {
+		it('should log with debug correct given time', async () => {
 			const functionName = 'Unit test';
 			const functionToMeasure = () => {
 				setTimeout(() => console.log('Test'), 3000);
@@ -41,7 +41,7 @@ describe('PerformanceService', () => {
 			nowSpy.mockReturnValue(5);
 			const expectedText = formatPerformanceResult(0, functionName);
 
-			sut.measure(functionToMeasure, functionName);
+			await sut.measure(functionToMeasure, functionName);
 
 			expect(loggerServiceMock.debug).toBeCalledWith(expectedText);
 		});
