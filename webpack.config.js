@@ -2,6 +2,7 @@ const path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = {
 	mode: 'none',
@@ -41,5 +42,18 @@ module.exports = {
 		plugins: [new TsconfigPathsPlugin()],
 		extensions: ['.tsx', '.ts', '.js'],
 		fallback: { constants: false },
+	},
+	optimization: {
+		minimize: true,
+		minimizer: [
+			new TerserPlugin({
+				terserOptions: {
+					output: {
+						comments: false,
+					},
+				},
+				extractComments: false,
+			}),
+		],
 	},
 };
