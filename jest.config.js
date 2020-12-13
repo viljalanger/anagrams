@@ -18,5 +18,26 @@ module.exports = {
 		'@anagrams/utils': ['src/utils/index.ts'],
 		'@anagrams/environment': ['src/environments/index.ts'],
 	},
+	collectCoverage: true,
+	collectCoverageFrom: ['src/**/*.ts'],
+	coveragePathIgnorePatterns: [
+		'/node_modules',
+		'test-config',
+		'interfaces',
+		'jestGlobalMocks.ts',
+		'.module.ts',
+		'<rootDir>/src/app/main.ts',
+		'.mock.ts',
+		'models',
+		'index.ts',
+	],
 	coverageDirectory: 'coverage',
+	coverageThreshold: {
+		global: {
+			branches: 20,
+			functions: 30,
+			lines: 50,
+			statements: 50,
+		},
+	},
 };
