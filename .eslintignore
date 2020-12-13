@@ -3,5 +3,6 @@
 /dist
 /documentation
 /coverage
-jest.config.js
+
+jest.*.js
 webpack.*.js
