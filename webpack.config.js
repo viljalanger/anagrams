@@ -2,17 +2,12 @@ const path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = {
 	mode: 'none',
 	target: 'node',
 	entry: {
 		app: path.resolve(__dirname, 'src/main.ts'),
-	},
-	output: {
-		path: path.resolve(__dirname, 'dist'),
-		filename: 'main.js',
 	},
 	plugins: [
 		new CleanWebpackPlugin(),
@@ -27,33 +22,11 @@ module.exports = {
 				use: 'ts-loader',
 				exclude: /node_modules/,
 			},
-			{
-				test: /environment\.ts?$/,
-				loader: 'file-replace-loader',
-				options: {
-					condition: true,
-					replacement: path.resolve(__dirname, 'src/environments/environment.prod.ts'),
-					async: true,
-				},
-			},
 		],
 	},
 	resolve: {
 		plugins: [new TsconfigPathsPlugin()],
 		extensions: ['.tsx', '.ts', '.js'],
 		fallback: { constants: false },
-	},
-	optimization: {
-		minimize: true,
-		minimizer: [
-			new TerserPlugin({
-				terserOptions: {
-					output: {
-						comments: false,
-					},
-				},
-				extractComments: false,
-			}),
-		],
 	},
 };

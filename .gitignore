@@ -106,3 +106,4 @@ dist
 # Anagrams ignores
 **/*.exclude
 /dev
+/tmp
