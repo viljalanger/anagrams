@@ -15,14 +15,14 @@
 		"eslint": "eslint \"src/**/*.ts\"",
 		"eslint:fix": "npm run eslint --fix",
 		"prettier": "prettier \"**/*.ts\"",
-		"prettir:fix": "npm run prettier --write",
-		"precommit": "npm run eslint:fix && npm run pretteir:fix",
+		"prettier:fix": "npm run prettier --write",
+		"pre-commit-push": "npm run eslint:fix && npm run prettier:fix && npm run test",
 		"prepush": "npm run test"
 	},
 	"husky": {
 		"hooks": {
-			"pre-commit": "lint-staged",
-			"pre-push": "npm run prepush"
+			"pre-commit": "npm run pre-commit-push",
+			"pre-push": "npm run pre-commit-push"
 		}
 	},
 	"lint-staged": {
