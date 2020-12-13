@@ -17,6 +17,7 @@ module.exports = {
 		'@anagrams/services': ['src/services/index.ts'],
 		'@anagrams/utils': ['src/utils/index.ts'],
 		'@anagrams/environment': ['src/environments/index.ts'],
+		'@anagrams/injector': ['src/injector/index.ts'],
 	},
 	coverageDirectory: 'coverage',
 };

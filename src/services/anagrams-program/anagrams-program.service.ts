@@ -3,12 +3,7 @@ import { inject, injectable } from 'inversify';
 
 import { InvalidInputException, SearchOptions } from '@anagrams/models';
 import { formatResults } from '@anagrams/utils';
-
-import {
-	IDictionaryServiceKkey,
-	IInteractionServiceKey,
-	IPerformanceServiceKey,
-} from '../injector/type-keys';
+import { IDictionaryServiceKkey, IInteractionServiceKey, IPerformanceServiceKey } from '@anagrams/injector';
 
 import { askForTermQuestion, initQuestions, newSearchQuestion } from './program-questions';
 import { closingCommand, invalidTermCommand, matchNotFoundCommand } from './program-commands';

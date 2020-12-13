@@ -8,9 +8,9 @@ import {
 	IAnagramsProgramServiceKey,
 	IDictionaryServiceKkey,
 	IInteractionServiceKey,
-} from '../injector/type-keys';
+	Injector,
+} from '@anagrams/injector';
 
-import { InjectorService } from '../injector/injector.service';
 import { askForTermQuestion, initQuestions, newSearchQuestion } from './program-questions';
 import { closingCommand, invalidTermCommand, matchNotFoundCommand } from './program-commands';
 import { IAnagramsProgramService } from '../interfaces/anagrams-program.interface';
@@ -22,7 +22,7 @@ describe('AnagramsProgramService', () => {
 	let interactionServiceMock: MockProxy<IInteractionService>;
 	let dictionaryServiceMock: MockProxy<IDictionaryService>;
 
-	const container = InjectorService.getContainer();
+	const container = Injector.getContainer();
 
 	beforeEach(() => {
 		interactionServiceMock = mock<IInteractionService>();

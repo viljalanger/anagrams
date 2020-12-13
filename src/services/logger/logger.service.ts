@@ -1,7 +1,8 @@
 import { inject, injectable } from 'inversify';
 import { Logger } from 'tslog';
 
-import { IConfigServiceKey, LoggerKey } from '../injector/type-keys';
+import { IConfigServiceKey, LoggerKey } from '@anagrams/injector';
+
 import { IConfigService } from '../interfaces/config.interface';
 import { ILoggerService } from '../interfaces/logger.interface';
 

@@ -1,16 +1,15 @@
 import 'reflect-metadata';
 
 import {
+	Injector,
 	IAnagramsProgramServiceKey,
-	InjectorService,
-	IAnagramsProgramService,
-	ILoggerService,
-	ILoggerServiceKey,
 	IConfigServiceKey,
-	IConfigService,
-} from '@anagrams/services';
+	ILoggerServiceKey,
+} from '@anagrams/injector';
 
-const container = InjectorService.getContainer();
+import { IAnagramsProgramService, IConfigService, ILoggerService } from '@anagrams/services';
+
+const container = Injector.getContainer();
 const anagramsProgramService = container.get<IAnagramsProgramService>(IAnagramsProgramServiceKey);
 const loggerService = container.get<ILoggerService>(ILoggerServiceKey);
 const configService = container.get<IConfigService>(IConfigServiceKey);

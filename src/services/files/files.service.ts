@@ -4,8 +4,8 @@ import { F_OK } from 'constants';
 import { inject, injectable } from 'inversify';
 
 import { Exception } from '@anagrams/models';
+import { ILoggerServiceKey } from '@anagrams/injector';
 
-import { ILoggerServiceKey } from '../injector/type-keys';
 import { IFilesService } from '../interfaces/files.interface';
 import { ILoggerService } from '../interfaces/logger.interface';
 

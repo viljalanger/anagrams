@@ -2,8 +2,8 @@ import { inject, injectable } from 'inversify';
 import prompts, { Answers } from 'prompts';
 
 import { Exception, Question } from '@anagrams/models';
+import { ILoggerServiceKey } from '@anagrams/injector';
 
-import { ILoggerServiceKey } from '../injector/type-keys';
 import { IInteractionService } from '../interfaces/interaction.interface';
 import { ILoggerService } from '../interfaces/logger.interface';
 

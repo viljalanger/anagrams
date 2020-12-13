@@ -1,13 +1,13 @@
 import { environment } from '@anagrams/environment';
 
-import { InjectorService } from '../injector/injector.service';
-import { IConfigServiceKey } from '../injector/type-keys';
+import { Injector, IConfigServiceKey } from '@anagrams/injector';
+
 import { IConfigService } from '../interfaces/config.interface';
 
 describe('ConfigService', () => {
 	let sut: IConfigService;
 
-	const container = InjectorService.getContainer();
+	const container = Injector.getContainer();
 
 	beforeEach(() => {
 		sut = container.get<IConfigService>(IConfigServiceKey);

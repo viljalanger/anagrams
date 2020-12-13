@@ -3,8 +3,8 @@ import { inject, injectable } from 'inversify';
 
 import { sortText } from '@anagrams/utils';
 import { SearchOptions, FileNotFoundException, InvalidOperationException } from '@anagrams/models';
+import { IFilesServiceKey } from '@anagrams/injector';
 
-import { IFilesServiceKey } from '../injector/type-keys';
 import { IDictionaryService } from '../interfaces/dictionary.interface';
 import { IFilesService } from '../interfaces/files.interface';
 

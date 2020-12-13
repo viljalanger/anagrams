@@ -4,8 +4,8 @@ import { join } from 'path';
 import fs from 'fs';
 import { F_OK } from 'constants';
 
-import { InjectorService } from '../injector/injector.service';
-import { IFilesServiceKey } from '../injector/type-keys';
+import { IFilesServiceKey, Injector } from '@anagrams/injector';
+
 import { IFilesService } from '../interfaces/files.interface';
 
 describe('FilesService', () => {
@@ -16,7 +16,7 @@ describe('FilesService', () => {
 	const testFilePath = join(process.cwd(), 'test-assets/file.txt');
 	const fakeFilePath = 'fake/file/path.txt';
 
-	const container = InjectorService.getContainer();
+	const container = Injector.getContainer();
 
 	beforeEach(() => {
 		sut = container.get<IFilesService>(IFilesServiceKey);

@@ -3,6 +3,23 @@ import { Container, ContainerModule } from 'inversify';
 import { Logger } from 'tslog';
 
 import {
+	IConfigService,
+	IFilesService,
+	FilesService,
+	IDictionaryService,
+	DictionaryService,
+	IInteractionService,
+	IAnagramsProgramService,
+	AnagramsProgramService,
+	ILoggerService,
+	LoggerService,
+	IPerformanceService,
+	ConfigService,
+	InteractionService,
+	PerformanceService,
+} from '@anagrams/services';
+
+import {
 	IAnagramsProgramServiceKey,
 	IConfigServiceKey,
 	IDictionaryServiceKkey,
@@ -14,22 +31,7 @@ import {
 	performanceKey,
 } from './type-keys';
 
-import { AnagramsProgramService } from '../anagrams-program/anagrams-program.service';
-import { DictionaryService } from '../dictionary/dictionary.service';
-import { FilesService } from '../files/files.service';
-import { InteractionService } from '../interaction/interaction.service';
-import { LoggerService } from '../logger/logger.service';
-import { PerformanceService } from '../performance/performance.service';
-import { ConfigService } from '../config/config.service';
-import { IAnagramsProgramService } from '../interfaces/anagrams-program.interface';
-import { IConfigService } from '../interfaces/config.interface';
-import { IDictionaryService } from '../interfaces/dictionary.interface';
-import { IFilesService } from '../interfaces/files.interface';
-import { IInteractionService } from '../interfaces/interaction.interface';
-import { ILoggerService } from '../interfaces/logger.interface';
-import { IPerformanceService } from '../interfaces/performance.interface';
-
-export class InjectorService {
+export class Injector {
 	private static _container: Container;
 
 	static get container(): Container {

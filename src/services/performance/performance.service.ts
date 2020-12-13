@@ -2,8 +2,8 @@ import { Performance } from 'perf_hooks';
 import { inject, injectable } from 'inversify';
 
 import { formatPerformanceResult } from '@anagrams/utils';
+import { ILoggerServiceKey, performanceKey } from '@anagrams/injector';
 
-import { ILoggerServiceKey, performanceKey } from '../injector/type-keys';
 import { IPerformanceService } from '../interfaces/performance.interface';
 import { ILoggerService } from '../interfaces/logger.interface';
 

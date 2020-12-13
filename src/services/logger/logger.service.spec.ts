@@ -2,9 +2,8 @@ import { mock, MockProxy, mockReset } from 'jest-mock-extended';
 import { Logger } from 'tslog';
 
 import { Exception } from '@anagrams/models';
+import { IConfigServiceKey, ILoggerServiceKey, LoggerKey, Injector } from '@anagrams/injector';
 
-import { InjectorService } from '../injector/injector.service';
-import { IConfigServiceKey, ILoggerServiceKey, LoggerKey } from '../injector/type-keys';
 import { ILoggerService } from '../interfaces/logger.interface';
 import { IConfigService } from '../interfaces/config.interface';
 
@@ -13,7 +12,7 @@ describe('LoggerService', () => {
 	let loggerMock: MockProxy<Logger>;
 	let configServiceMock: MockProxy<IConfigService>;
 
-	const container = InjectorService.getContainer();
+	const container = Injector.getContainer();
 
 	beforeEach(() => {
 		loggerMock = mock<Logger>();

@@ -2,9 +2,8 @@ import { performance } from 'perf_hooks';
 import { mock, MockProxy, mockReset } from 'jest-mock-extended';
 
 import { formatPerformanceResult } from '@anagrams/utils';
+import { ILoggerServiceKey, IPerformanceServiceKey, Injector } from '@anagrams/injector';
 
-import { InjectorService } from '../injector/injector.service';
-import { ILoggerServiceKey, IPerformanceServiceKey } from '../injector/type-keys';
 import { ILoggerService } from '../interfaces/logger.interface';
 import { IPerformanceService } from '../interfaces/performance.interface';
 
@@ -13,7 +12,7 @@ describe('PerformanceService', () => {
 	let loggerServiceMock: MockProxy<ILoggerService>;
 	const nowSpy = jest.spyOn(performance, 'now');
 
-	const container = InjectorService.getContainer();
+	const container = Injector.getContainer();
 
 	beforeEach(() => {
 		loggerServiceMock = mock<ILoggerService>();

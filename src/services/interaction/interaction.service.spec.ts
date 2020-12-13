@@ -4,9 +4,8 @@ import { mock, MockProxy, mockReset } from 'jest-mock-extended';
 import prompts from 'prompts';
 
 import { Question } from '@anagrams/models';
+import { IInteractionServiceKey, ILoggerServiceKey, Injector } from '@anagrams/injector';
 
-import { InjectorService } from '../injector/injector.service';
-import { IInteractionServiceKey, ILoggerServiceKey } from '../injector/type-keys';
 import { IInteractionService } from '../interfaces/interaction.interface';
 import { ILoggerService } from '../interfaces/logger.interface';
 
@@ -14,7 +13,7 @@ describe('InteractionService', () => {
 	let sut: IInteractionService;
 	let loggerServiceMock: MockProxy<ILoggerService>;
 
-	const container = InjectorService.getContainer();
+	const container = Injector.getContainer();
 
 	beforeEach(() => {
 		loggerServiceMock = mock<ILoggerService>();

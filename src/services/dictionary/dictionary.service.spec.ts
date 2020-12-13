@@ -1,8 +1,8 @@
 import 'reflect-metadata';
 import { mock, mockReset, MockProxy } from 'jest-mock-extended';
 
-import { InjectorService } from '../injector/injector.service';
-import { IDictionaryServiceKkey, IFilesServiceKey } from '../injector/type-keys';
+import { IDictionaryServiceKkey, IFilesServiceKey, Injector } from '@anagrams/injector';
+
 import { IDictionaryService } from '../interfaces/dictionary.interface';
 import { IFilesService } from '../interfaces/files.interface';
 
@@ -13,7 +13,7 @@ describe('DictionaryService', () => {
 	const filePath = 'file/path.txt';
 	const lines = ['Abc', 'aBc', 'abC', 'acB'];
 
-	const container = InjectorService.getContainer();
+	const container = Injector.getContainer();
 
 	beforeEach(() => {
 		filesServiceMock = mock<IFilesService>();
