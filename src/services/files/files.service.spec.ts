@@ -6,6 +6,7 @@ import { F_OK } from 'constants';
 
 import { InjectorService } from '../injector/injector.service';
 import { IFilesService } from './files.service';
+import { IFilesServiceKey } from '../injector/type-keys';
 
 describe('FilesService', () => {
 	let sut: IFilesService;
@@ -18,7 +19,7 @@ describe('FilesService', () => {
 	const container = InjectorService.getContainer();
 
 	beforeEach(() => {
-		sut = container.get<IFilesService>('FilesService');
+		sut = container.get<IFilesService>(IFilesServiceKey);
 	});
 
 	afterEach(() => {

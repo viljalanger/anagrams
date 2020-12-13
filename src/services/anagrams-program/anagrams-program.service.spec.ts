@@ -11,6 +11,11 @@ import { IDictionaryService } from '../dictionary/dictionary.service';
 import { InjectorService } from '../injector/injector.service';
 import { askForTermQuestion, initQuestions, newSearchQuestion } from './program-questions';
 import { closingCommand, matchNotFoundCommand } from './program-commands';
+import {
+	IAnagramsProgramServiceKey,
+	IDictionaryServiceKkey,
+	IInteractionServiceKey,
+} from '../injector/type-keys';
 
 describe('AnagramsProgramService', () => {
 	let sut: IAnagramsProgramService;
@@ -23,10 +28,10 @@ describe('AnagramsProgramService', () => {
 		interactionServiceMock = mock<IInteractionService>();
 		dictionaryServiceMock = mock<IDictionaryService>();
 
-		container.rebind<IInteractionService>('InteractionService').toConstantValue(interactionServiceMock);
-		container.rebind<IDictionaryService>('DictionaryService').toConstantValue(dictionaryServiceMock);
+		container.rebind<IInteractionService>(IInteractionServiceKey).toConstantValue(interactionServiceMock);
+		container.rebind<IDictionaryService>(IDictionaryServiceKkey).toConstantValue(dictionaryServiceMock);
 
-		sut = container.get<IAnagramsProgramService>('AnagramsProgramService');
+		sut = container.get<IAnagramsProgramService>(IAnagramsProgramServiceKey);
 	});
 
 	afterEach(() => {

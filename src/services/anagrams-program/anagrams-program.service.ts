@@ -2,12 +2,13 @@ import 'reflect-metadata';
 import { inject, injectable } from 'inversify';
 
 import { SearchOptions } from '@anagrams/models';
+import { formatResults } from '@anagrams/utils';
 
 import { IDictionaryService } from '../dictionary/dictionary.service';
 import { IInteractionService } from '../interaction/interaction.service';
-import { formatResults } from '@anagrams/utils';
 import { askForTermQuestion, initQuestions, newSearchQuestion } from './program-questions';
 import { closingCommand, matchNotFoundCommand } from './program-commands';
+import { IDictionaryServiceKkey, IInteractionServiceKey } from '../injector/type-keys';
 
 export interface IAnagramsProgramService {
 	searchOptions: SearchOptions;
@@ -19,8 +20,8 @@ export interface IAnagramsProgramService {
 
 @injectable()
 export class AnagramsProgramService implements IAnagramsProgramService {
-	@inject('InteractionService') private readonly interactionService!: IInteractionService;
-	@inject('DictionaryService') private readonly disctionaryService!: IDictionaryService;
+	@inject(IInteractionServiceKey) private readonly interactionService!: IInteractionService;
+	@inject(IDictionaryServiceKkey) private readonly disctionaryService!: IDictionaryService;
 
 	private readonly askForTermQuestion = askForTermQuestion;
 	private readonly initQuestions = initQuestions;

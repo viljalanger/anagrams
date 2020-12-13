@@ -2,6 +2,7 @@ import { mock, MockProxy, mockReset } from 'jest-mock-extended';
 import { Logger } from 'tslog';
 
 import { InjectorService } from '../injector/injector.service';
+import { ILoggerServiceKey } from '../injector/type-keys';
 import { ILoggerService } from './logger.service';
 
 describe('LoggerService', () => {
@@ -15,7 +16,7 @@ describe('LoggerService', () => {
 
 		container.rebind('Logger').toConstantValue(loggerMock);
 
-		sut = container.get<ILoggerService>('LoggerService');
+		sut = container.get<ILoggerService>(ILoggerServiceKey);
 	});
 
 	afterEach(() => {

@@ -2,6 +2,7 @@ import { mock, MockProxy, mockReset } from 'jest-mock-extended';
 import prompts from 'prompts';
 
 import { InjectorService } from '../injector/injector.service';
+import { IInteractionServiceKey, ILoggerServiceKey } from '../injector/type-keys';
 import { ILoggerService } from '../logger/logger.service';
 import { IInteractionService } from './interaction.service';
 
@@ -16,9 +17,9 @@ describe('InteractionService', () => {
 	beforeEach(() => {
 		loggerServiceMock = mock<ILoggerService>();
 
-		container.rebind<ILoggerService>('LoggerService').toConstantValue(loggerServiceMock);
+		container.rebind<ILoggerService>(ILoggerServiceKey).toConstantValue(loggerServiceMock);
 
-		sut = container.get<IInteractionService>('InteractionService');
+		sut = container.get<IInteractionService>(IInteractionServiceKey);
 	});
 
 	afterEach(() => {

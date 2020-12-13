@@ -5,6 +5,7 @@ import { sortText } from '@anagrams/utils';
 import { SearchOptions } from '@anagrams/models';
 
 import { IFilesService } from '../files/files.service';
+import { IFilesServiceKey } from '../injector/type-keys';
 
 export interface IDictionaryService {
 	dictionary: Map<string, string>;
@@ -15,7 +16,7 @@ export interface IDictionaryService {
 
 @injectable()
 export class DictionaryService implements IDictionaryService {
-	@inject('FilesService') private readonly filesService!: IFilesService;
+	@inject(IFilesServiceKey) private readonly filesService!: IFilesService;
 
 	dictionary: Map<string, string> = new Map();
 

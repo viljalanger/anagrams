@@ -2,6 +2,7 @@
 
 import { inject, injectable } from 'inversify';
 import prompts, { Answers } from 'prompts';
+import { ILoggerServiceKey } from '../injector/type-keys';
 
 import { ILoggerService } from '../logger/logger.service';
 
@@ -13,7 +14,7 @@ export interface IInteractionService {
 
 @injectable()
 export class InteractionService implements IInteractionService {
-	@inject('LoggerService') private readonly loggerService!: ILoggerService;
+	@inject(ILoggerServiceKey) private readonly loggerService!: ILoggerService;
 
 	say(message: string): void {
 		this.loggerService.info(message);

@@ -1,16 +1,24 @@
 import { Container, ContainerModule } from 'inversify';
 import { Logger } from 'tslog';
+
+import { environment } from '@anagrams/environment';
+
 import {
 	AnagramsProgramService,
 	IAnagramsProgramService,
 } from '../anagrams-program/anagrams-program.service';
-
-import { environment } from '@anagrams/environment';
-
 import { DictionaryService, IDictionaryService } from '../dictionary/dictionary.service';
 import { FilesService, IFilesService } from '../files/files.service';
 import { IInteractionService, InteractionService } from '../interaction/interaction.service';
 import { ILoggerService, LoggerService } from '../logger/logger.service';
+import {
+	IAnagramsProgramServiceKey,
+	IDictionaryServiceKkey,
+	IFilesServiceKey,
+	IInteractionServiceKey,
+	ILoggerServiceKey,
+	LoggerKey,
+} from './type-keys';
 
 export class InjectorService {
 	container: Container;
@@ -34,11 +42,11 @@ export class InjectorService {
 
 	private getApplicationDependencies(): ContainerModule {
 		return new ContainerModule((bind) => {
-			bind<IFilesService>('FilesService').to(FilesService);
-			bind<IDictionaryService>('DictionaryService').to(DictionaryService);
-			bind<IInteractionService>('InteractionService').to(InteractionService);
-			bind<IAnagramsProgramService>('AnagramsProgramService').to(AnagramsProgramService);
-			bind<ILoggerService>('LoggerService').to(LoggerService);
+			bind<IFilesService>(IFilesServiceKey).to(FilesService);
+			bind<IDictionaryService>(IDictionaryServiceKkey).to(DictionaryService);
+			bind<IInteractionService>(IInteractionServiceKey).to(InteractionService);
+			bind<IAnagramsProgramService>(IAnagramsProgramServiceKey).to(AnagramsProgramService);
+			bind<ILoggerService>(ILoggerServiceKey).to(LoggerService);
 		});
 	}
 
@@ -46,7 +54,7 @@ export class InjectorService {
 		const logger = new Logger({ displayFilePath: 'hidden', ...environment.logger.tslogSettings });
 
 		return new ContainerModule((bind) => {
-			bind<Logger>('Logger').toConstantValue(logger);
+			bind<Logger>(LoggerKey).toConstantValue(logger);
 		});
 	}
 }
