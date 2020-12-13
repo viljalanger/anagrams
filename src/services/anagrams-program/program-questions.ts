@@ -16,11 +16,11 @@ const initQuestions = [
 	},
 	{
 		type: 'select',
-		name: 'exactMatch',
-		message: 'Do you want to have exact match results?',
+		name: 'matchAllChars',
+		message: 'Do you only want results that match all chars?',
 		choices: [
 			{ title: 'Yes', description: 'Results will match with all chars.', value: true },
-			{ title: 'No', description: 'Results will not match with all chars.', value: false },
+			{ title: 'No', description: 'Results could be partial matches.', value: false },
 		],
 	},
 ];

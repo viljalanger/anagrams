@@ -11,7 +11,7 @@ describe('DictionaryService', () => {
 	let filesServiceMock: MockProxy<IFilesService>;
 
 	const filePath = 'file/path.txt';
-	const lines = ['Abc', 'aBc', 'abC'];
+	const lines = ['Abc', 'aBc', 'abC', 'acB'];
 
 	const container = InjectorService.getContainer();
 
@@ -79,7 +79,7 @@ describe('DictionaryService', () => {
 		});
 
 		it('should match all words with same chars ignoring case when called with caseSensitive false', async () => {
-			const options = { caseSensitive: false, exactMath: true };
+			const options = { caseSensitive: false, matchAllChars: true };
 			const term = 'aBc';
 
 			const results = await sut.search(term, options);
@@ -87,17 +87,8 @@ describe('DictionaryService', () => {
 			expect(results).toEqual(lines);
 		});
 
-		it('should match only exact case word when called with caseSensitive true', async () => {
-			const options = { caseSensitive: true, exactMath: true };
-			const term = 'aBc';
-
-			const results = await sut.search(term, options);
-
-			expect(results).toEqual([term]);
-		});
-
-		it('should also match words partially ignoring case when called with caseSensitive false and exactMath false', async () => {
-			const options = { caseSensitive: false, exactMath: false };
+		it('should also match words partially ignoring case when called with caseSensitive false and matchAllChars false', async () => {
+			const options = { caseSensitive: false, matchAllChars: false };
 			const term = 'ac';
 
 			const results = await sut.search(term, options);
@@ -105,13 +96,24 @@ describe('DictionaryService', () => {
 			expect(results).toEqual(lines);
 		});
 
-		it('should not match words partially but consider case when called with caseSensitive true exactMath false', async () => {
-			const options = { caseSensitive: true, exactMath: false };
+		it('should not match words partially but consider case when called with caseSensitive true and matchAllChars false', async () => {
+			const options = { caseSensitive: true, matchAllChars: false };
 			const term = 'aB';
+			const expectedAnagrams = ['aBc', 'acB'];
 
 			const results = await sut.search(term, options);
 
-			expect(results).toEqual(['aBc']);
+			expect(results).toEqual(expectedAnagrams);
+		});
+
+		it('should find anagram with same case and match all chars when called with caseSensitive true and matchAllChars true', async () => {
+			const options = { caseSensitive: true, matchAllChars: true };
+			const term = 'baC';
+			const expectedAnagrams = ['abC'];
+
+			const results = await sut.search(term, options);
+
+			expect(results).toEqual(expectedAnagrams);
 		});
 	});
 });

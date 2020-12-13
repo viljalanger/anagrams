@@ -37,29 +37,30 @@ export class DictionaryService implements IDictionaryService {
 	}
 
 	async search(term: string, options?: SearchOptions): Promise<string[]> {
-		const { caseSensitive, exactMatch } = options ?? {};
+		const { caseSensitive, matchAllChars } = options ?? {};
 		term = caseSensitive ? term : term.toLowerCase();
 
-		const matchingKeys = this.findMatchingKeys(term, caseSensitive, exactMatch);
+		const matchingKeys = this.findMatchingKeys(term, caseSensitive, matchAllChars);
 		const results = matchingKeys.map((key: string) => this.dictionary.get(key)) as string[];
 
 		return results;
 	}
 
-	private findMatchingKeys(term: string, caseSensitive?: boolean, exactMatch?: boolean): string[] {
+	private findMatchingKeys(term: string, caseSensitive?: boolean, matchAllChars?: boolean): string[] {
 		const matchingKeys: string[] = [];
 
 		const keys = Array.from(this.dictionary.keys());
 		keys.forEach((key: string) => {
 			let compareKey: string = caseSensitive ? key.valueOf() : key.valueOf().toLowerCase();
-			const termChars: string[] = term.split('');
 
 			let partialMatch = false;
-			if (!exactMatch) {
+			if (!matchAllChars) {
+				const termChars: string[] = term.split('');
 				partialMatch = termChars.every((char: string) => compareKey.split('').includes(char));
 			}
 
 			compareKey = sortText(compareKey);
+			term = sortText(term);
 			if (compareKey === term || partialMatch) {
 				matchingKeys.push(key);
 			}
