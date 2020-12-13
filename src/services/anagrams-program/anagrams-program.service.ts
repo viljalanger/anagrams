@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import { inject, injectable } from 'inversify';
 
-import { SearchOptions } from '@anagrams/models';
+import { InvalidInputException, SearchOptions } from '@anagrams/models';
 import { formatResults } from '@anagrams/utils';
 
 import { IDictionaryService } from '../dictionary/dictionary.service';
@@ -62,7 +62,7 @@ export class AnagramsProgramService implements IAnagramsProgramService {
 			if (!term) {
 				await this.interactionService.say(invalidTermCommand);
 
-				continue;
+				throw new InvalidInputException(`Entered input is invalid: ${term}`);
 			}
 
 			const searchFunction = async (): Promise<string[]> => {

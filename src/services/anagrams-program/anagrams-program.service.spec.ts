@@ -16,6 +16,7 @@ import {
 	IDictionaryServiceKkey,
 	IInteractionServiceKey,
 } from '../injector/type-keys';
+import { InvalidInputException } from '@anagrams/models';
 
 describe('AnagramsProgramService', () => {
 	let sut: IAnagramsProgramService;
@@ -62,21 +63,14 @@ describe('AnagramsProgramService', () => {
 	});
 
 	describe('run', () => {
-		it('should print invalid term command when inout term is input is undefined', async () => {
+		it('should print invalid term command and throw invalid input exception when input term is invalid', async () => {
 			const invalidTermAnswer = {};
-			const termAnswer = { term: 'Exit' };
-			const newSearchAnswer = { doNewSearch: false };
+			const expectedException = new InvalidInputException('Entered input is invalid: undefined');
 
-			interactionServiceMock.ask
-				.calledWith(askForTermQuestion as any)
-				.mockResolvedValue(termAnswer)
-				.mockResolvedValueOnce(invalidTermAnswer);
+			interactionServiceMock.ask.calledWith(askForTermQuestion as any).mockResolvedValue(invalidTermAnswer);
 
-			interactionServiceMock.ask.calledWith(newSearchQuestion as any).mockResolvedValue(newSearchAnswer);
-
-			await sut.run();
-
-			expect(interactionServiceMock.say).toHaveBeenNthCalledWith(1, invalidTermCommand);
+			await expect(sut.run()).rejects.toThrowError(expectedException);
+			expect(interactionServiceMock.say).toHaveBeenCalledWith(invalidTermCommand);
 		});
 
 		it('should not print invalid term command when inout term is defined', async () => {
