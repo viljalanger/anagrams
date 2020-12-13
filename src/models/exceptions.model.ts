@@ -17,9 +17,3 @@ export class InvalidOperationException extends Exception {
 		super(errorMessage);
 	}
 }
-
-export class InvalidInputException extends Exception {
-	constructor(errorMessage: any) {
-		super(errorMessage);
-	}
-}
