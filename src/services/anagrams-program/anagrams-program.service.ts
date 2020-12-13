@@ -2,7 +2,6 @@ import 'reflect-metadata';
 import { inject, injectable } from 'inversify';
 
 import { SearchOptions } from '@anagrams/models';
-import { sortText } from '@anagrams/utils';
 
 import { IDictionaryService } from '../dictionary/dictionary.service';
 import { IInteractionService } from '../interaction/interaction.service';
@@ -31,7 +30,7 @@ export class AnagramsProgramService implements IAnagramsProgramService {
 	private readonly matchNotFoundCommand = matchNotFoundCommand;
 
 	private _searchOptions!: SearchOptions;
-	private _continue: boolean = true;
+	private _continue = true;
 
 	get searchOptions(): SearchOptions {
 		return this._searchOptions;

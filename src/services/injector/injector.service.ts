@@ -34,15 +34,11 @@ export class InjectorService {
 
 	private getApplicationDependencies(): ContainerModule {
 		return new ContainerModule((bind) => {
-			this.container.bind<IFilesService>('FilesService').to(FilesService);
-			this.container.bind<IDictionaryService>('DictionaryService').to(DictionaryService);
-			this.container.bind<IInteractionService>('InteractionService').to(InteractionService);
-
-			this.container
-				.bind<IAnagramsProgramService>('AnagramsProgramService')
-				.to(AnagramsProgramService);
-
-			this.container.bind<ILoggerService>('LoggerService').to(LoggerService);
+			bind<IFilesService>('FilesService').to(FilesService);
+			bind<IDictionaryService>('DictionaryService').to(DictionaryService);
+			bind<IInteractionService>('InteractionService').to(InteractionService);
+			bind<IAnagramsProgramService>('AnagramsProgramService').to(AnagramsProgramService);
+			bind<ILoggerService>('LoggerService').to(LoggerService);
 		});
 	}
 

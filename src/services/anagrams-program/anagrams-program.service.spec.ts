@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import 'reflect-metadata';
 import { mock, mockReset, MockProxy } from 'jest-mock-extended';
 

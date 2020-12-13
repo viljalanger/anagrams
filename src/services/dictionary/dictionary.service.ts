@@ -19,7 +19,8 @@ export class DictionaryService implements IDictionaryService {
 
 	dictionary: Map<string, string> = new Map();
 
-	async read(dictionaryPath: string, caseSesitive?: boolean): Promise<void> {
+	async read(dictionaryPath: string): Promise<void> {
+		// eslint-disable-next-line security/detect-non-literal-fs-filename
 		const existsPath = await this.filesService.exists(dictionaryPath);
 		if (!existsPath) {
 			throw new Error('File does not exist');
@@ -47,12 +48,12 @@ export class DictionaryService implements IDictionaryService {
 	private findMatchingKeys(term: string, caseSensitive?: boolean, exactMatch?: boolean): string[] {
 		const matchingKeys: string[] = [];
 
-		let keys = Array.from(this.dictionary.keys());
+		const keys = Array.from(this.dictionary.keys());
 		keys.forEach((key: string) => {
 			let compareKey: string = caseSensitive ? key.valueOf() : key.valueOf().toLowerCase();
 			const termChars: string[] = term.split('');
 
-			let partialMatch: boolean = false;
+			let partialMatch = false;
 			if (!exactMatch) {
 				partialMatch = termChars.every((char: string) => compareKey.split('').includes(char));
 			}

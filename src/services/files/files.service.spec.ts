@@ -1,3 +1,5 @@
+/* eslint-disable security/detect-non-literal-fs-filename */
+
 import { join } from 'path';
 import fs from 'fs';
 import { F_OK } from 'constants';

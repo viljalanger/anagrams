@@ -28,5 +28,5 @@
 			"@anagrams/environment": ["src/environments/index.ts"]
 		}
 	},
-	"exclude": ["node_modules", "tmp", "**/*.spec.ts"]
+	"exclude": ["node_modules", "tmp"]
 }

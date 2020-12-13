@@ -13,18 +13,17 @@ export interface IFilesService {
 @injectable()
 export class FilesService implements IFilesService {
 	async exists(filePath: string): Promise<boolean> {
-		return new Promise(async (resolve) => {
-			try {
-				await promises.access(filePath, F_OK);
+		try {
+			await promises.access(filePath, F_OK);
 
-				resolve(true);
-			} catch (error) {
-				resolve(false);
-			}
-		});
+			return true;
+		} catch (error) {
+			return false;
+		}
 	}
 
 	async isFile(filePath: string): Promise<boolean> {
+		// eslint-disable-next-line security/detect-non-literal-fs-filename
 		const stats = await promises.lstat(filePath);
 
 		return stats.isFile();
