@@ -32,33 +32,25 @@ import {
 } from './type-keys';
 
 export class Injector {
-	private static _container: Container;
-
-	static get container(): Container {
-		return this._container;
-	}
-
-	static set container(value: Container) {
-		this._container = value;
-	}
+	private static container: Container;
 
 	static getContainer(): Container {
-		if (!this._container) {
-			this._container = new Container();
+		if (!this.container) {
+			this.container = new Container();
 
 			this.configure();
 		}
 
-		return this._container;
+		return this.container;
 	}
 
 	private static configure(): void {
 		const applicationDependencies = this.getApplicationDependencies();
-		this._container.load(applicationDependencies);
+		this.container.load(applicationDependencies);
 
-		const configService = this._container.get<IConfigService>(IConfigServiceKey);
+		const configService = this.container.get<IConfigService>(IConfigServiceKey);
 		const thirdPartyDependencies = this.getThirdPartyDependencies(configService);
-		this._container.load(thirdPartyDependencies);
+		this.container.load(thirdPartyDependencies);
 	}
 
 	private static getApplicationDependencies(): ContainerModule {
