@@ -33,22 +33,19 @@ describe('LoggerService', () => {
 		expect(sut).toBeDefined();
 	});
 
-	describe('silly, trace, debug, info, warn, error', () => {
+	describe('silly, trace, debug, info, warn', () => {
 		it('should respective logger function with expected parameters', () => {
 			const sillyMessage = 'I am the silly log message';
 			const traceMessage = 'I am the trace log message';
 			const debugMessage = 'I am the debug log message';
 			const infoMessage = 'I am the info log message';
 			const warnMessage = 'I am the warn log message';
-			const errorMessage = 'I am the error log message';
-			const errorException = new Exception('I am the error exception');
 
 			sut.silly(sillyMessage);
 			sut.trace(traceMessage);
 			sut.debug(debugMessage);
 			sut.info(infoMessage);
 			sut.warn(warnMessage);
-			sut.error(errorMessage, errorException);
 
 			expect(loggerMock.silly).toHaveBeenCalledTimes(1);
 			expect(loggerMock.silly).toHaveBeenCalledWith(sillyMessage);
@@ -64,9 +61,26 @@ describe('LoggerService', () => {
 
 			expect(loggerMock.warn).toHaveBeenCalledTimes(1);
 			expect(loggerMock.warn).toHaveBeenCalledWith(warnMessage);
+		});
+	});
 
-			expect(loggerMock.error).toHaveBeenCalledTimes(1);
-			expect(loggerMock.error).toHaveBeenCalledWith(errorMessage, errorException.message);
+	describe('error', () => {
+		it('should call logger.error with expected error and exception message when exception is defined', () => {
+			const errorMessage = 'I am the error message';
+			const exceptionMessage = 'I am the exception message';
+			const exception = new Exception(exceptionMessage);
+
+			sut.error(errorMessage, exception);
+
+			expect(loggerMock.error).toHaveBeenCalledWith(errorMessage, exceptionMessage);
+		});
+
+		it('should call logger.error with expected error message and empty string when exception is not defined', () => {
+			const errorMessage = 'I am the error message';
+
+			sut.error(errorMessage);
+
+			expect(loggerMock.error).toHaveBeenCalledWith(errorMessage, '');
 		});
 	});
 
