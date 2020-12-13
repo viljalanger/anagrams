@@ -9,4 +9,8 @@ const formatResults = (matches: string[]): string => {
 	return `This is what I found: ${matches.join(', ')}`;
 };
 
-export { sortText, formatResults };
+const formatPerformanceResult = (executionTime: number, functionName?: string): string => {
+	return `Function name: [${functionName}] - Execution Time: ${executionTime}`;
+};
+
+export { sortText, formatResults, formatPerformanceResult };
