@@ -8,12 +8,12 @@
 		"build": "webpack --config webpack.config.js",
 		"start": "npm run build && node dist/main.js",
 		"start:dev": "npm run nodemon src/main.ts",
-		"nodemon": "node_modules/.bin/nodemon --exec 'node_modules/.bin/ts-node --project tsconfig.json -r tsconfig-paths/register'",
-		"test": "node_modules/.bin/jest --config ./jest.config.js",
+		"nodemon": "nodemon --exec 'ts-node --project tsconfig.json -r tsconfig-paths/register'",
+		"test": "jest --config ./jest.config.js",
 		"coverage": "rimraf ./coverage && jest --config ./jest.config.js --coverage",
 		"coverage:web": "npm run coverage && http-server ./coverage/lcov-report -o",
-		"eslint": "node_modules/.bin/eslint \"src/**/*.ts\"",
-		"prettier": "node_modules/.bin/prettier \"**/*.ts\" --write"
+		"eslint": "eslint \"src/**/*.ts\"",
+		"prettier": "prettier \"**/*.ts\" --write"
 	},
 	"author": "Yiyi Chen",
 	"devDependencies": {
