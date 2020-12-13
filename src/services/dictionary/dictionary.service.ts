@@ -2,7 +2,7 @@ import 'reflect-metadata';
 import { inject, injectable } from 'inversify';
 
 import { sortText } from '@anagrams/utils';
-import { SearchOptions } from '@anagrams/models';
+import { SearchOptions, FileNotFoundException, InvalidOperationException } from '@anagrams/models';
 
 import { IFilesService } from '../files/files.service';
 import { IFilesServiceKey } from '../injector/type-keys';
@@ -24,12 +24,12 @@ export class DictionaryService implements IDictionaryService {
 		// eslint-disable-next-line security/detect-non-literal-fs-filename
 		const existsPath = await this.filesService.exists(dictionaryPath);
 		if (!existsPath) {
-			throw new Error('File does not exist');
+			throw new FileNotFoundException('File does not exist');
 		}
 
 		const isFile = await this.filesService.isFile(dictionaryPath);
 		if (!isFile) {
-			throw new Error('Invalid operations');
+			throw new InvalidOperationException('Cannot read something different from a file');
 		}
 
 		const lines = await this.filesService.readAllLines(dictionaryPath);

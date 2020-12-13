@@ -5,12 +5,10 @@ export const environment = {
 		logsPath: 'dev/LOGS',
 		maxLogFileSize: 5120,
 		maxLogFileAge: 3,
-		minLog: 0,
-		tslogSettings: {
+		tsLogSettings: {
 			displayDateTime: false,
 			displayFunctionName: false,
 			displayInstanceName: false,
-			displayLogLevel: false,
 			displayLoggerName: false,
 			displayRequestId: false,
 			displayTypes: false,

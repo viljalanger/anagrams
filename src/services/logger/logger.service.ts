@@ -1,5 +1,7 @@
 import { inject, injectable } from 'inversify';
 import { Logger } from 'tslog';
+import { IConfigService } from '../config/config.service';
+import { IConfigServiceKey, LoggerKey } from '../injector/type-keys';
 
 export interface ILoggerService {
 	silly(message: string): void;
@@ -7,13 +9,14 @@ export interface ILoggerService {
 	debug(message: string): void;
 	info(message: string): void;
 	warn(message: string): void;
-	error(message: string): void;
-	fatal(message: string): void;
+	error(message: string, errorObj?: Error): void;
+	fatal(errorObj: Error): void;
 }
 
 @injectable()
 export class LoggerService implements ILoggerService {
-	@inject('Logger') private readonly logger!: Logger;
+	@inject(LoggerKey) private readonly logger!: Logger;
+	@inject(IConfigServiceKey) private readonly configService!: IConfigService;
 
 	silly(message: string): void {
 		this.logger.silly(message);
@@ -35,11 +38,17 @@ export class LoggerService implements ILoggerService {
 		this.logger.warn(message);
 	}
 
-	error(message: string): void {
-		this.logger.error(message);
+	error(message: string, errorObj?: Error): void {
+		this.logger.error(message, errorObj?.message ?? '');
+
+		if (errorObj) {
+			this.fatal(errorObj);
+		}
 	}
 
-	fatal(message: string): void {
-		this.logger.fatal(message);
+	fatal(errorObj: Error): void {
+		if (!this.configService.isProduction()) {
+			this.logger.fatal(errorObj);
+		}
 	}
 }

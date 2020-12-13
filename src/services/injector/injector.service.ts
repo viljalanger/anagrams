@@ -2,8 +2,6 @@ import { performance, Performance } from 'perf_hooks';
 import { Container, ContainerModule } from 'inversify';
 import { Logger } from 'tslog';
 
-import { environment } from '@anagrams/environment';
-
 import {
 	AnagramsProgramService,
 	IAnagramsProgramService,
@@ -15,6 +13,7 @@ import { ILoggerService, LoggerService } from '../logger/logger.service';
 import { IPerformanceService, PerformanceService } from '../performance/performance.service';
 import {
 	IAnagramsProgramServiceKey,
+	IConfigServiceKey,
 	IDictionaryServiceKkey,
 	IFilesServiceKey,
 	IInteractionServiceKey,
@@ -23,6 +22,7 @@ import {
 	LoggerKey,
 	performanceKey,
 } from './type-keys';
+import { ConfigService, IConfigService } from '../config/config.service';
 
 export class InjectorService {
 	container: Container;
@@ -38,10 +38,12 @@ export class InjectorService {
 	}
 
 	private configure(): void {
-		const thirdPartyDependencies = this.getThirdPartyDependencies();
 		const applicationDependencies = this.getApplicationDependencies();
+		this.container.load(applicationDependencies);
 
-		this.container.load(thirdPartyDependencies, applicationDependencies);
+		const configService = this.container.get<IConfigService>(IConfigServiceKey);
+		const thirdPartyDependencies = this.getThirdPartyDependencies(configService);
+		this.container.load(thirdPartyDependencies);
 	}
 
 	private getApplicationDependencies(): ContainerModule {
@@ -52,14 +54,15 @@ export class InjectorService {
 			bind<IAnagramsProgramService>(IAnagramsProgramServiceKey).to(AnagramsProgramService);
 			bind<ILoggerService>(ILoggerServiceKey).to(LoggerService);
 			bind<IPerformanceService>(IPerformanceServiceKey).to(PerformanceService);
+			bind<IConfigService>(IConfigServiceKey).to(ConfigService);
 		});
 	}
 
-	private getThirdPartyDependencies(): ContainerModule {
+	private getThirdPartyDependencies(configService: IConfigService): ContainerModule {
 		const logger = new Logger({
 			displayFilePath: 'hidden',
-			minLevel: environment.production ? 'info' : 'silly',
-			...environment.logger.tslogSettings,
+			minLevel: configService.isProduction() ? 'info' : 'silly',
+			...configService.getTSLogSettings(),
 		});
 
 		return new ContainerModule((bind) => {

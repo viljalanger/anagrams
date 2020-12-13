@@ -44,7 +44,7 @@ describe('DictionaryService', () => {
 			filesServiceMock.isFile.calledWith(filePath).mockResolvedValue(false);
 			const existsResult = async () => await sut.read(filePath);
 
-			expect(existsResult).rejects.toThrow('Invalid operation');
+			expect(existsResult).rejects.toThrow('Cannot read something different from a file');
 		});
 
 		it('should map correctly the received array items to the dictionary', async () => {

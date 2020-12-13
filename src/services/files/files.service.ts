@@ -1,8 +1,11 @@
 import { promises, createReadStream } from 'fs';
 import { createInterface as createReadLineInterface } from 'readline';
 import { F_OK } from 'constants';
+import { inject, injectable } from 'inversify';
 
-import { injectable } from 'inversify';
+import { Exception } from '@anagrams/models';
+import { ILoggerServiceKey } from '../injector/type-keys';
+import { ILoggerService } from '../logger/logger.service';
 
 export interface IFilesService {
 	exists(filePath: string): Promise<boolean>;
@@ -12,6 +15,8 @@ export interface IFilesService {
 
 @injectable()
 export class FilesService implements IFilesService {
+	@inject(ILoggerServiceKey) private readonly loggerService!: ILoggerService;
+
 	async exists(filePath: string): Promise<boolean> {
 		try {
 			await promises.access(filePath, F_OK);
@@ -32,14 +37,20 @@ export class FilesService implements IFilesService {
 	async readAllLines(filePath: string): Promise<string[]> {
 		const fileStream = createReadStream(filePath);
 		const readLine = createReadLineInterface({ input: fileStream });
-
 		const lines: string[] = [];
-		for await (const line of readLine) {
-			lines.push(line);
-		}
 
-		readLine.close();
-		fileStream.close();
+		try {
+			for await (const line of readLine) {
+				lines.push(line);
+			}
+		} catch (errorObj) {
+			this.loggerService.fatal(errorObj);
+
+			throw new Exception('An error occured while reading dictionary lines');
+		} finally {
+			readLine.close();
+			fileStream.close();
+		}
 
 		return lines;
 	}
