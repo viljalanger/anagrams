@@ -1,9 +1,7 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 import { inject, injectable } from 'inversify';
 import prompts, { Answers } from 'prompts';
 
-import { Exception } from '@anagrams/models';
+import { Exception, Question } from '@anagrams/models';
 
 import { ILoggerServiceKey } from '../injector/type-keys';
 import { IInteractionService } from '../interfaces/interaction.interface';
@@ -17,10 +15,10 @@ export class InteractionService implements IInteractionService {
 		this.loggerService.info(message);
 	}
 
-	async ask(questions: any): Promise<Answers<any>>;
-	async ask(questions: any[]): Promise<Answers<any>> {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	async ask(...args: Question[]): Promise<Answers<any>> {
 		try {
-			return await prompts(questions);
+			return await prompts(args);
 		} catch (errorObj) {
 			this.loggerService.fatal(errorObj);
 

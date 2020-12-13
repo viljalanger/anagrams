@@ -1,12 +1,14 @@
+jest.mock('prompts');
+
 import { mock, MockProxy, mockReset } from 'jest-mock-extended';
 import prompts from 'prompts';
+
+import { Question } from '@anagrams/models';
 
 import { InjectorService } from '../injector/injector.service';
 import { IInteractionServiceKey, ILoggerServiceKey } from '../injector/type-keys';
 import { IInteractionService } from '../interfaces/interaction.interface';
 import { ILoggerService } from '../interfaces/logger.interface';
-
-jest.mock('prompts');
 
 describe('InteractionService', () => {
 	let sut: IInteractionService;
@@ -42,22 +44,22 @@ describe('InteractionService', () => {
 
 	describe('ask', () => {
 		it('should call prompts with expected question object', async () => {
-			const question = { type: 'text', name: 'name', message: 'What is your name?' };
+			const question: Question = { type: 'text', name: 'name', message: 'What is your name?' };
 
 			await sut.ask(question);
 
-			expect(prompts).toBeCalledWith(question);
+			expect(prompts).toHaveBeenCalledWith([question]);
 		});
 
 		it('should call prompts with expected questions array', async () => {
-			const questions = [
+			const questions: Question[] = [
 				{ type: 'text', name: 'name', message: 'What is your name?' },
 				{ type: 'text', name: 'surname', message: 'What is your surname?' },
 			];
 
-			await sut.ask(questions);
+			await sut.ask(...questions);
 
-			expect(prompts).toBeCalledWith(questions);
+			expect(prompts).toHaveBeenCalledWith(questions);
 		});
 	});
 });

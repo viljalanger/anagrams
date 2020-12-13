@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 import { performance } from 'perf_hooks';
 import { mock, MockProxy, mockReset } from 'jest-mock-extended';
 
@@ -38,29 +36,28 @@ describe('PerformanceService', () => {
 	describe('measure', () => {
 		it('should log with debug correct given time', async () => {
 			const functionName = 'Unit test';
-			const functionToMeasure = async (): Promise<any> => {
+			const runMe = async (): Promise<void> => {
 				setTimeout(() => console.log('Test'), 3000);
 			};
 			nowSpy.mockReturnValue(5);
 			const expectedText = formatPerformanceResult(0, functionName);
 
-			await sut.measure(functionToMeasure, functionName);
+			await sut.measure(runMe, functionName);
 
-			expect(loggerServiceMock.debug).toBeCalledWith(expectedText);
+			expect(loggerServiceMock.debug).toHaveBeenCalledWith(expectedText);
 		});
 
 		it('should return result from function passed as parameter as expected', async () => {
 			const expectedResult = 'I am the function result';
-			const functionToMeasure = async (): Promise<any> => {
+			const runMe = async (): Promise<string> => {
 				return new Promise((resolve) => {
-					setTimeout(async (): Promise<any> => {
-						resolve(expectedResult);
-					}, 500);
+					setTimeout(() => resolve(expectedResult), 500);
 				});
 			};
+
 			nowSpy.mockReturnValue(5);
 
-			const result = await sut.measure(functionToMeasure);
+			const result = await sut.measure(runMe);
 
 			expect(result).toEqual(expectedResult);
 		});

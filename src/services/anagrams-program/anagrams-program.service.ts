@@ -44,7 +44,8 @@ export class AnagramsProgramService implements IAnagramsProgramService {
 		this.interactionService.say('Done!');
 		this.interactionService.say(`Imported ${this.disctionaryService.dictionary.size} entries`);
 		this.interactionService.say('Before starting, let me ask you a couple of questions');
-		const { caseSensitive, matchAllChars } = await this.interactionService.ask(initQuestions);
+
+		const { caseSensitive, matchAllChars } = await this.interactionService.ask(...initQuestions);
 
 		this._searchOptions = { caseSensitive, matchAllChars };
 	}
@@ -62,7 +63,10 @@ export class AnagramsProgramService implements IAnagramsProgramService {
 			const searchFunction = async (): Promise<string[]> => {
 				return await this.disctionaryService.search(term, this.searchOptions);
 			};
-			const searchResults: string[] = await this.performanceService.measure(searchFunction, 'Search term');
+			const searchResults: string[] = await this.performanceService.measure<string[]>(
+				searchFunction,
+				'Search term',
+			);
 
 			if (searchResults && searchResults.length > 0) {
 				await this.interactionService.say(formatResults(searchResults));

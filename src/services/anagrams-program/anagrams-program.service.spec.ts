@@ -1,10 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 import 'reflect-metadata';
 import { mock, mockReset, MockProxy } from 'jest-mock-extended';
 
 import { formatResults } from '@anagrams/utils';
-import { InvalidInputException } from '@anagrams/models';
+import { InvalidInputException, Question } from '@anagrams/models';
 
 import {
 	IAnagramsProgramServiceKey,
@@ -45,7 +43,7 @@ describe('AnagramsProgramService', () => {
 		it('should call dictionary.read with expected parameter', async () => {
 			const filePath = 'file/path.txt';
 			const initAnswers = { caseSensitive: true, matchAllChars: true };
-			interactionServiceMock.ask.calledWith(initQuestions).mockResolvedValue(initAnswers);
+			interactionServiceMock.ask.calledWith(...initQuestions).mockResolvedValue(initAnswers);
 
 			await sut.init(filePath);
 
@@ -55,7 +53,7 @@ describe('AnagramsProgramService', () => {
 		it('should set searchOptions from init answers as expected', async () => {
 			const filePath = 'file/path.txt';
 			const initAnswers = { caseSensitive: false, matchAllChars: true };
-			interactionServiceMock.ask.calledWith(initQuestions).mockResolvedValue(initAnswers);
+			interactionServiceMock.ask.calledWith(...initQuestions).mockResolvedValue(initAnswers);
 
 			await sut.init(filePath);
 
@@ -68,7 +66,7 @@ describe('AnagramsProgramService', () => {
 			const invalidTermAnswer = {};
 			const expectedException = new InvalidInputException('Entered input is invalid: undefined');
 
-			interactionServiceMock.ask.calledWith(askForTermQuestion as any).mockResolvedValue(invalidTermAnswer);
+			interactionServiceMock.ask.calledWith(askForTermQuestion).mockResolvedValue(invalidTermAnswer);
 
 			await expect(sut.run()).rejects.toThrowError(expectedException);
 			expect(interactionServiceMock.say).toHaveBeenCalledWith(invalidTermCommand);
@@ -78,8 +76,8 @@ describe('AnagramsProgramService', () => {
 			const termAnswer = { term: 'Exit' };
 			const newSearchAnswer = { doNewSearch: false };
 
-			interactionServiceMock.ask.calledWith(askForTermQuestion as any).mockResolvedValue(termAnswer);
-			interactionServiceMock.ask.calledWith(newSearchQuestion as any).mockResolvedValue(newSearchAnswer);
+			interactionServiceMock.ask.calledWith(askForTermQuestion as Question).mockResolvedValue(termAnswer);
+			interactionServiceMock.ask.calledWith(newSearchQuestion as Question).mockResolvedValue(newSearchAnswer);
 
 			await sut.run();
 
@@ -89,8 +87,9 @@ describe('AnagramsProgramService', () => {
 		it('should read search term and pass it to dictionary.search as expected ', async () => {
 			const termAnswer = { term: 'abc' };
 			const newSearchAnswer = { doNewSearch: false };
-			interactionServiceMock.ask.calledWith(askForTermQuestion as any).mockResolvedValue(termAnswer);
-			interactionServiceMock.ask.calledWith(newSearchQuestion as any).mockResolvedValue(newSearchAnswer);
+
+			interactionServiceMock.ask.calledWith(askForTermQuestion as Question).mockResolvedValue(termAnswer);
+			interactionServiceMock.ask.calledWith(newSearchQuestion as Question).mockResolvedValue(newSearchAnswer);
 
 			await sut.run();
 
@@ -101,12 +100,15 @@ describe('AnagramsProgramService', () => {
 			const searchResults = ['abc', 'abc'];
 			const termAnswer = { term: 'abc' };
 			const newSearchAnswer = { doNewSearch: false };
-			interactionServiceMock.ask.calledWith(askForTermQuestion as any).mockResolvedValue(termAnswer);
-			interactionServiceMock.ask.calledWith(newSearchQuestion as any).mockResolvedValue(newSearchAnswer);
-			dictionaryServiceMock.search
-				.calledWith(termAnswer.term, sut.searchOptions)
-				.mockResolvedValue(searchResults);
+			const searchOptions = sut.searchOptions;
 			const expectedResultsCommand = formatResults(searchResults);
+
+			interactionServiceMock.ask.calledWith(askForTermQuestion).mockResolvedValue(termAnswer);
+			interactionServiceMock.ask.calledWith(newSearchQuestion).mockResolvedValue(newSearchAnswer);
+
+			dictionaryServiceMock.search
+				.calledWith(termAnswer.term, searchOptions)
+				.mockResolvedValue(searchResults);
 
 			await sut.run();
 
@@ -117,10 +119,13 @@ describe('AnagramsProgramService', () => {
 			const searchResults: string[] = [];
 			const termAnswer = { term: 'abc' };
 			const newSearchAnswer = { doNewSearch: false };
-			interactionServiceMock.ask.calledWith(askForTermQuestion as any).mockResolvedValue(termAnswer);
-			interactionServiceMock.ask.calledWith(newSearchQuestion as any).mockResolvedValue(newSearchAnswer);
+			const searchOptions = sut.searchOptions;
+
+			interactionServiceMock.ask.calledWith(askForTermQuestion as Question).mockResolvedValue(termAnswer);
+			interactionServiceMock.ask.calledWith(newSearchQuestion as Question).mockResolvedValue(newSearchAnswer);
+
 			dictionaryServiceMock.search
-				.calledWith(termAnswer.term, sut.searchOptions)
+				.calledWith(termAnswer.term, searchOptions)
 				.mockResolvedValue(searchResults);
 
 			await sut.run();
@@ -132,8 +137,10 @@ describe('AnagramsProgramService', () => {
 			const searchResults: string[] = [];
 			const termAnswer = { term: 'abc' };
 			const newSearchAnswer = { doNewSearch: false };
-			interactionServiceMock.ask.calledWith(askForTermQuestion as any).mockResolvedValue(termAnswer);
-			interactionServiceMock.ask.calledWith(newSearchQuestion as any).mockResolvedValue(newSearchAnswer);
+
+			interactionServiceMock.ask.calledWith(askForTermQuestion as Question).mockResolvedValue(termAnswer);
+			interactionServiceMock.ask.calledWith(newSearchQuestion as Question).mockResolvedValue(newSearchAnswer);
+
 			dictionaryServiceMock.search
 				.calledWith(termAnswer.term, sut.searchOptions)
 				.mockResolvedValue(searchResults);

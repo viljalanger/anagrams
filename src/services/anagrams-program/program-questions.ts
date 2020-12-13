@@ -1,10 +1,12 @@
-const askForTermQuestion = {
+import { Question } from '@anagrams/models';
+
+const askForTermQuestion: Question = {
 	type: 'text',
 	name: 'term',
 	message: 'What are you looking for?',
 };
 
-const initQuestions = [
+const initQuestions: Question[] = [
 	{
 		type: 'select',
 		name: 'caseSensitive',
@@ -25,7 +27,7 @@ const initQuestions = [
 	},
 ];
 
-const newSearchQuestion = {
+const newSearchQuestion: Question = {
 	type: 'select',
 	name: 'doNewSearch',
 	message: 'Do you want to do another search?',
