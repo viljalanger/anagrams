@@ -23,12 +23,8 @@ describe('AnagramsProgramService', () => {
 		interactionServiceMock = mock<IInteractionService>();
 		dictionaryServiceMock = mock<IDictionaryService>();
 
-		container
-			.rebind<IInteractionService>('InteractionService')
-			.toConstantValue(interactionServiceMock);
-		container
-			.rebind<IDictionaryService>('DictionaryService')
-			.toConstantValue(dictionaryServiceMock);
+		container.rebind<IInteractionService>('InteractionService').toConstantValue(interactionServiceMock);
+		container.rebind<IDictionaryService>('DictionaryService').toConstantValue(dictionaryServiceMock);
 
 		sut = container.get<IAnagramsProgramService>('AnagramsProgramService');
 	});
@@ -64,12 +60,8 @@ describe('AnagramsProgramService', () => {
 		it('should read search term and pass it to dictionary.search as expected ', async () => {
 			const termAnswer = { term: 'abc' };
 			const newSearchAnswer = { doNewSearch: false };
-			interactionServiceMock.ask
-				.calledWith(askForTermQuestion as any)
-				.mockResolvedValue(termAnswer);
-			interactionServiceMock.ask
-				.calledWith(newSearchQuestion as any)
-				.mockResolvedValue(newSearchAnswer);
+			interactionServiceMock.ask.calledWith(askForTermQuestion as any).mockResolvedValue(termAnswer);
+			interactionServiceMock.ask.calledWith(newSearchQuestion as any).mockResolvedValue(newSearchAnswer);
 
 			await sut.run();
 
@@ -80,12 +72,8 @@ describe('AnagramsProgramService', () => {
 			const searchResults = ['abc', 'abc'];
 			const termAnswer = { term: 'abc' };
 			const newSearchAnswer = { doNewSearch: false };
-			interactionServiceMock.ask
-				.calledWith(askForTermQuestion as any)
-				.mockResolvedValue(termAnswer);
-			interactionServiceMock.ask
-				.calledWith(newSearchQuestion as any)
-				.mockResolvedValue(newSearchAnswer);
+			interactionServiceMock.ask.calledWith(askForTermQuestion as any).mockResolvedValue(termAnswer);
+			interactionServiceMock.ask.calledWith(newSearchQuestion as any).mockResolvedValue(newSearchAnswer);
 			dictionaryServiceMock.search
 				.calledWith(termAnswer.term, sut.searchOptions)
 				.mockResolvedValue(searchResults);
@@ -100,12 +88,8 @@ describe('AnagramsProgramService', () => {
 			const searchResults: string[] = [];
 			const termAnswer = { term: 'abc' };
 			const newSearchAnswer = { doNewSearch: false };
-			interactionServiceMock.ask
-				.calledWith(askForTermQuestion as any)
-				.mockResolvedValue(termAnswer);
-			interactionServiceMock.ask
-				.calledWith(newSearchQuestion as any)
-				.mockResolvedValue(newSearchAnswer);
+			interactionServiceMock.ask.calledWith(askForTermQuestion as any).mockResolvedValue(termAnswer);
+			interactionServiceMock.ask.calledWith(newSearchQuestion as any).mockResolvedValue(newSearchAnswer);
 			dictionaryServiceMock.search
 				.calledWith(termAnswer.term, sut.searchOptions)
 				.mockResolvedValue(searchResults);
@@ -119,12 +103,8 @@ describe('AnagramsProgramService', () => {
 			const searchResults: string[] = [];
 			const termAnswer = { term: 'abc' };
 			const newSearchAnswer = { doNewSearch: false };
-			interactionServiceMock.ask
-				.calledWith(askForTermQuestion as any)
-				.mockResolvedValue(termAnswer);
-			interactionServiceMock.ask
-				.calledWith(newSearchQuestion as any)
-				.mockResolvedValue(newSearchAnswer);
+			interactionServiceMock.ask.calledWith(askForTermQuestion as any).mockResolvedValue(termAnswer);
+			interactionServiceMock.ask.calledWith(newSearchQuestion as any).mockResolvedValue(newSearchAnswer);
 			dictionaryServiceMock.search
 				.calledWith(termAnswer.term, sut.searchOptions)
 				.mockResolvedValue(searchResults);
