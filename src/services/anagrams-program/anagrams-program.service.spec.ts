@@ -10,7 +10,7 @@ import { IInteractionService } from '../interaction/interaction.service';
 import { IDictionaryService } from '../dictionary/dictionary.service';
 import { InjectorService } from '../injector/injector.service';
 import { askForTermQuestion, initQuestions, newSearchQuestion } from './program-questions';
-import { closingCommand, matchNotFoundCommand } from './program-commands';
+import { closingCommand, invalidTermCommand, matchNotFoundCommand } from './program-commands';
 import {
 	IAnagramsProgramServiceKey,
 	IDictionaryServiceKkey,
@@ -62,6 +62,35 @@ describe('AnagramsProgramService', () => {
 	});
 
 	describe('run', () => {
+		it('should print invalid term command when inout term is input is undefined', async () => {
+			const invalidTermAnswer = {};
+			const termAnswer = { term: 'Exit' };
+			const newSearchAnswer = { doNewSearch: false };
+
+			interactionServiceMock.ask
+				.calledWith(askForTermQuestion as any)
+				.mockResolvedValue(termAnswer)
+				.mockResolvedValueOnce(invalidTermAnswer);
+
+			interactionServiceMock.ask.calledWith(newSearchQuestion as any).mockResolvedValue(newSearchAnswer);
+
+			await sut.run();
+
+			expect(interactionServiceMock.say).toHaveBeenNthCalledWith(1, invalidTermCommand);
+		});
+
+		it('should not print invalid term command when inout term is defined', async () => {
+			const termAnswer = { term: 'Exit' };
+			const newSearchAnswer = { doNewSearch: false };
+
+			interactionServiceMock.ask.calledWith(askForTermQuestion as any).mockResolvedValue(termAnswer);
+			interactionServiceMock.ask.calledWith(newSearchQuestion as any).mockResolvedValue(newSearchAnswer);
+
+			await sut.run();
+
+			expect(interactionServiceMock.say).not.toHaveBeenCalledWith(invalidTermCommand);
+		});
+
 		it('should read search term and pass it to dictionary.search as expected ', async () => {
 			const termAnswer = { term: 'abc' };
 			const newSearchAnswer = { doNewSearch: false };

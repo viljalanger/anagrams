@@ -7,7 +7,7 @@ import { formatResults } from '@anagrams/utils';
 import { IDictionaryService } from '../dictionary/dictionary.service';
 import { IInteractionService } from '../interaction/interaction.service';
 import { askForTermQuestion, initQuestions, newSearchQuestion } from './program-questions';
-import { closingCommand, matchNotFoundCommand } from './program-commands';
+import { closingCommand, invalidTermCommand, matchNotFoundCommand } from './program-commands';
 import {
 	IDictionaryServiceKkey,
 	IInteractionServiceKey,
@@ -28,13 +28,6 @@ export class AnagramsProgramService implements IAnagramsProgramService {
 	@inject(IInteractionServiceKey) private readonly interactionService!: IInteractionService;
 	@inject(IDictionaryServiceKkey) private readonly disctionaryService!: IDictionaryService;
 	@inject(IPerformanceServiceKey) private readonly performanceService!: IPerformanceService;
-
-	private readonly askForTermQuestion = askForTermQuestion;
-	private readonly initQuestions = initQuestions;
-	private readonly newSearchQuestion = newSearchQuestion;
-
-	private readonly closingCommand = closingCommand;
-	private readonly matchNotFoundCommand = matchNotFoundCommand;
 
 	private _searchOptions!: SearchOptions;
 	private _continue = true;
@@ -57,14 +50,20 @@ export class AnagramsProgramService implements IAnagramsProgramService {
 		this.interactionService.say('Done!');
 		this.interactionService.say(`Imported ${this.disctionaryService.dictionary.size} entries`);
 		this.interactionService.say('Before starting, let me ask you a couple of questions');
-		const { caseSensitive, matchAllChars } = await this.interactionService.ask(this.initQuestions);
+		const { caseSensitive, matchAllChars } = await this.interactionService.ask(initQuestions);
 
 		this._searchOptions = { caseSensitive, matchAllChars };
 	}
 
 	async run(): Promise<void> {
 		while (this._continue) {
-			const { term } = await this.interactionService.ask(this.askForTermQuestion);
+			const { term } = await this.interactionService.ask(askForTermQuestion);
+
+			if (!term) {
+				await this.interactionService.say(invalidTermCommand);
+
+				continue;
+			}
 
 			const searchFunction = async (): Promise<string[]> => {
 				return await this.disctionaryService.search(term, this.searchOptions);
@@ -74,13 +73,13 @@ export class AnagramsProgramService implements IAnagramsProgramService {
 			if (searchResults && searchResults.length > 0) {
 				await this.interactionService.say(formatResults(searchResults));
 			} else {
-				await this.interactionService.say(this.matchNotFoundCommand);
+				await this.interactionService.say(matchNotFoundCommand);
 			}
 
-			const { doNewSearch } = await this.interactionService.ask(this.newSearchQuestion);
+			const { doNewSearch } = await this.interactionService.ask(newSearchQuestion);
 			this._continue = doNewSearch;
 		}
 
-		await this.interactionService.say(this.closingCommand);
+		await this.interactionService.say(closingCommand);
 	}
 }
