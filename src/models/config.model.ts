@@ -1,5 +1,5 @@
 export interface Config {
-	production: boolean;
+	env: 'dev' | 'staging' | 'prod';
 	dictionaryPath: string;
 	loggerConfing: LoggerConfig;
 }
@@ -19,3 +19,5 @@ export interface TSLogSettings {
 	displayRequestId: boolean;
 	displayTypes: boolean;
 }
+
+export type env = 'dev' | 'staging' | 'prod';

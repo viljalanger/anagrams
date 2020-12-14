@@ -1,7 +1,7 @@
 import { injectable } from 'inversify';
 
 import { environment } from '@anagrams/environment';
-import { TSLogSettings } from '@anagrams/models';
+import { env, TSLogSettings } from '@anagrams/models';
 
 import { IConfigService } from '../interfaces/config.interface';
 
@@ -14,7 +14,11 @@ export class ConfigService implements IConfigService {
 	}
 
 	isProduction(): boolean {
-		return this.environment.production;
+		return this.environment.env === 'prod';
+	}
+
+	getEnv(): env {
+		return this.environment.env as env;
 	}
 
 	getDictionaryPath(): string {

@@ -1,16 +1,14 @@
 import { inject, injectable } from 'inversify';
 import { Logger } from 'tslog';
 
-import { IConfigServiceKey, LoggerKey } from '@anagrams/injector';
+import { LoggerKey } from '@anagrams/injector';
 import { Exception } from '@anagrams/models';
 
-import { IConfigService } from '../interfaces/config.interface';
 import { ILoggerService } from '../interfaces/logger.interface';
 
 @injectable()
 export class LoggerService implements ILoggerService {
 	@inject(LoggerKey) private readonly logger!: Logger;
-	@inject(IConfigServiceKey) private readonly configService!: IConfigService;
 
 	silly(message: string): void {
 		this.logger.silly(message);
@@ -36,13 +34,11 @@ export class LoggerService implements ILoggerService {
 		this.logger.error(message, exeception?.message ?? '');
 
 		if (exeception) {
-			this.fatal(exeception);
+			this.logStackTrace(exeception);
 		}
 	}
 
-	fatal(exeception: Exception): void {
-		if (!this.configService.isProduction()) {
-			this.logger.fatal(exeception);
-		}
+	logStackTrace(exeception: Exception): void {
+		this.logger.debug(exeception);
 	}
 }

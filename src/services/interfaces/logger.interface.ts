@@ -7,5 +7,5 @@ export interface ILoggerService {
 	info(message: string): void;
 	warn(message: string): void;
 	error(message: string, exeception?: Exception): void;
-	fatal(exeception: Exception): void;
+	logStackTrace(exeception: Exception): void;
 }

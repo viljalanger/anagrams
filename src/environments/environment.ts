@@ -1,5 +1,5 @@
 export const environment = {
-	production: false,
+	env: 'dev',
 	dictionaryPath: 'assets/short-wordlist.txt',
 	logger: {
 		logsPath: 'dev/LOGS',

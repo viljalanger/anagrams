@@ -18,10 +18,10 @@ describe('ConfigService', () => {
 	});
 
 	it('should return correct environment properties', () => {
-		const { production, dictionaryPath, logger } = environment;
+		const { env, dictionaryPath, logger } = environment;
 		const { tsLogSettings, logsPath } = logger;
 
-		expect(sut.isProduction()).toEqual(production);
+		expect(sut.isProduction()).toEqual(env === 'prod');
 		expect(sut.getDictionaryPath()).toEqual(dictionaryPath);
 		expect(sut.getTSLogSettings()).toEqual(tsLogSettings);
 		expect(sut.getLogsPath()).toEqual(logsPath);

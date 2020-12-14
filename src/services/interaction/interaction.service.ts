@@ -24,7 +24,7 @@ export class InteractionService implements IInteractionService {
 
 			return answers;
 		} catch (exeception) {
-			this.loggerService.fatal(exeception);
+			this.loggerService.logStackTrace(exeception);
 
 			throw new Exception('An error occured while reading user answers');
 		}

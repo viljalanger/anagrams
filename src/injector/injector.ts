@@ -32,7 +32,6 @@ import {
 	LoggerKey,
 	performanceKey,
 } from './type-keys';
-import { time } from 'console';
 
 export class Injector {
 	private static container: Container;

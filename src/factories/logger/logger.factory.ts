@@ -9,9 +9,13 @@ import { ILogObject, Logger } from 'tslog';
 
 export class LoggerFactory {
 	static createLogger(configService: IConfigService): Logger {
+		const env = configService.getEnv();
+		const isDev = env === 'dev';
+		const isStaging = env === 'staging';
+
 		const logger = new Logger({
 			displayFilePath: 'hidden',
-			minLevel: configService.isProduction() ? 'info' : 'silly',
+			minLevel: isDev ? 'silly' : isStaging ? 'debug' : 'info',
 			...configService.getTSLogSettings(),
 		});
 
@@ -41,7 +45,6 @@ export class LoggerFactory {
 	private static getFileTransport(configService: IConfigService): (logObject: ILogObject) => void {
 		return (logObject: ILogObject) => {
 			let currentLogFilePath: string | undefined;
-			// const rootPath = __dirname;
 			const logsDirectoryPath = path.resolve(__dirname, configService.getLogsPath());
 
 			if (!existsSync(logsDirectoryPath)) {
@@ -62,17 +65,14 @@ export class LoggerFactory {
 	}
 
 	private static bindTransport(logger: Logger, transport: (logObject: ILogObject) => void): void {
-		logger.attachTransport(
-			{
-				silly: transport,
-				debug: transport,
-				trace: transport,
-				info: transport,
-				warn: transport,
-				error: transport,
-				fatal: transport,
-			},
-			'debug',
-		);
+		logger.attachTransport({
+			silly: transport,
+			debug: transport,
+			trace: transport,
+			info: transport,
+			warn: transport,
+			error: transport,
+			fatal: transport,
+		});
 	}
 }
