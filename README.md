@@ -10,6 +10,10 @@ The latest version is the 1.0.0
 
 #### Quick overview on the `package.json` scripts
 
+###### Reminder
+
+First run `npm i` from the project root.
+
 `npm run build`: Creates the bundle in production mode. By default the destination is `./dist`. Messages for debugging purpouse as well as exception stack traces are not visible in the console but the they are logged in the file system. This bundle is minified.
 
 `npm run build:staging`: Creates the bundle in staging mode. By default the destination is `./tmp`. The difference between this mode and the production is that exception stack traces are shown in the console but not `silly` messages that are prints in order to not lose informations about the user prompts (in any case they are stored in log files). This version has been created in order to test the application with an experience close to the user since it uses the full dictionary file. This bundle is not minified.
