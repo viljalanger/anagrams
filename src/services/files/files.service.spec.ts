@@ -3,14 +3,17 @@
 import { join } from 'path';
 import fs from 'fs';
 import { F_OK } from 'constants';
+import { mock, MockProxy, mockReset, any } from 'jest-mock-extended';
 
-import { IFilesServiceKey, Injector } from '@anagrams/injector';
-
-import { IFilesService } from '../interfaces/files.interface';
+import { IFilesServiceKey, ILoggerServiceKey, Injector } from '@anagrams/injector';
 import { Exception } from '@anagrams/models';
+
+import { ILoggerService } from '../interfaces/logger.interface';
+import { IFilesService } from '../interfaces/files.interface';
 
 describe('FilesService', () => {
 	let sut: IFilesService;
+	let loggerServiceMock: MockProxy<ILoggerService>;
 	const accessSpy = jest.spyOn(fs.promises, 'access');
 	const lstatSpy = jest.spyOn(fs.promises, 'lstat');
 
@@ -20,10 +23,15 @@ describe('FilesService', () => {
 	const container = Injector.getContainer();
 
 	beforeEach(() => {
+		loggerServiceMock = mock<ILoggerService>();
+
+		container.rebind<ILoggerService>(ILoggerServiceKey).toConstantValue(loggerServiceMock);
+
 		sut = container.get<IFilesService>(IFilesServiceKey);
 	});
 
 	afterEach(() => {
+		mockReset(loggerServiceMock);
 		accessSpy.mockReset();
 		lstatSpy.mockReset();
 	});
@@ -37,6 +45,18 @@ describe('FilesService', () => {
 			await sut.exists(fakeFilePath);
 
 			expect(fs.promises.access).toHaveBeenCalledWith(fakeFilePath, F_OK);
+		});
+
+		it('should log exception if is not possibile to access to the file', async () => {
+			const expectedExeption = new Exception('I cannot read it');
+			accessSpy.mockRejectedValue(expectedExeption);
+
+			await sut.exists(fakeFilePath);
+
+			expect(loggerServiceMock.error).toHaveBeenCalledWith(
+				'An error occured while trying to access the file',
+				any(),
+			);
 		});
 
 		it('should return true when promises.access does not throw exception', async () => {

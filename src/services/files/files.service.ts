@@ -26,7 +26,9 @@ export class FilesService implements IFilesService {
 			await this.promises.access(filePath, F_OK);
 
 			return true;
-		} catch (error) {
+		} catch (exception) {
+			this.loggerService.error('An error occured while trying to access the file', exception);
+
 			return false;
 		}
 	}
