@@ -1,4 +1,3 @@
-import RootPath from 'app-root-path';
 import path from 'path';
 
 import { appendFileSync, closeSync, existsSync, lstatSync, mkdirSync, openSync, readdirSync } from 'fs';
@@ -36,14 +35,14 @@ export class LoggerFactory {
 		const files = this.orderByRecentFile(logsDirectoryPath);
 		const filename = files.length ? files[0].file : undefined;
 
-		return filename ? path.resolve(RootPath.toString(), filename) : undefined;
+		return filename ? path.resolve(__dirname, filename) : undefined;
 	}
 
 	private static getFileTransport(configService: IConfigService): (logObject: ILogObject) => void {
 		return (logObject: ILogObject) => {
 			let currentLogFilePath: string | undefined;
-			const rootPath = RootPath.toString();
-			const logsDirectoryPath = path.resolve(rootPath, configService.getLogsPath());
+			// const rootPath = __dirname;
+			const logsDirectoryPath = path.resolve(__dirname, configService.getLogsPath());
 
 			if (!existsSync(logsDirectoryPath)) {
 				mkdirSync(logsDirectoryPath, { recursive: true });

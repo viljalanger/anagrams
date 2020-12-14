@@ -55,7 +55,6 @@
 		"webpack-merge": "^5.7.0"
 	},
 	"dependencies": {
-		"app-root-path": "^3.0.0",
 		"inversify": "^5.0.5",
 		"moment": "^2.29.1",
 		"prompts": "^2.4.0",
