@@ -4,7 +4,7 @@ import { mock, MockProxy, mockReset } from 'jest-mock-extended';
 import prompts from 'prompts';
 
 import { Question } from '@anagrams/models';
-import { IInteractionServiceKey, ILoggerServiceKey, Injector } from '@anagrams/injector';
+import { IInteractionServiceKey, ILoggerServiceKey, Injector, promisesKey } from '@anagrams/injector';
 
 import { IInteractionService } from '../interfaces/interaction.interface';
 import { ILoggerService } from '../interfaces/logger.interface';
@@ -19,6 +19,7 @@ describe('InteractionService', () => {
 		loggerServiceMock = mock<ILoggerService>();
 
 		container.rebind<ILoggerService>(ILoggerServiceKey).toConstantValue(loggerServiceMock);
+		container.rebind(promisesKey).toConstantValue(prompts);
 
 		sut = container.get<IInteractionService>(IInteractionServiceKey);
 	});

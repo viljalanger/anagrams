@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// import { promises, createReadStream } from 'fs';
-// import { createInterface as createReadLineInterface } from 'readline';
+
 import { F_OK } from 'constants';
 import { inject, injectable } from 'inversify';
 
