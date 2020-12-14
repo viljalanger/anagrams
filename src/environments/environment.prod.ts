@@ -5,7 +5,7 @@ export const environment = {
 		fileTransportSettings: {
 			logsPath: 'LOGS',
 			maxMBLogFileSize: 10,
-			maxLogFileAge: 3,
+			maxDaysLogFileAge: 3,
 		},
 		tsLogSettings: {
 			displayDateTime: false,

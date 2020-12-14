@@ -58,8 +58,9 @@ export class LoggerFactory {
 				const { maxDaysLogFileAge, maxMBLogFileSize } = configService.getFileTransportSettings();
 
 				const tooBig = size >= maxMBLogFileSize * 1024 * 1024;
+				const tooOld = this.getDaysAge(ctime) >= maxDaysLogFileAge;
 
-				if (tooBig) {
+				if (tooBig || tooOld) {
 					currentLogFilePath = this.createNewLogFile(currentLogFilePath, logsDirectoryPath);
 				}
 			} else {
@@ -68,6 +69,12 @@ export class LoggerFactory {
 			const message = `${JSON.stringify(logObject)}\n`;
 			appendFileSync(currentLogFilePath, message);
 		};
+	}
+
+	private static getDaysAge(creationDate: Date): number {
+		const timestamp = Date.now() - creationDate.getTime();
+
+		return timestamp / (1000 * 60 * 60 * 24);
 	}
 
 	private static createNewLogFile(currentLogFilePath: string | undefined, logsDirectoryPath: string) {
