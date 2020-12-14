@@ -10,7 +10,8 @@ const formatResults = (matches: string[]): string => {
 };
 
 const formatPerformanceResult = (executionTime: number, functionName: string): string => {
-	return `PerformanceService | measure | Operation name: [${functionName}] - Execution Time: ${executionTime} ms`;
+	const executionTimeText = (executionTime / 1000).toFixed(3);
+	return `PerformanceService | measure | Operation name: [${functionName}] - Execution Time: ${executionTimeText} s`;
 };
 
 export { sortText, formatResults, formatPerformanceResult };

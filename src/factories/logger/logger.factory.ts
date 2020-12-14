@@ -25,6 +25,7 @@ export class LoggerFactory {
 		return logger;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	private static orderByRecentFile(directory: string): any[] {
 		return readdirSync(directory)
 			.map((file) => {

@@ -26,8 +26,9 @@ describe('utils', () => {
 	describe('formatPerformanceResult', () => {
 		it('should format result as expected', () => {
 			const executionTime = 5;
+			const executionTimeText = (executionTime / 1000).toFixed(3);
 			const functionName = 'Unit Test';
-			const expectedText = `PerformanceService | measure | Operation name: [${functionName}] - Execution Time: ${executionTime} ms`;
+			const expectedText = `PerformanceService | measure | Operation name: [${functionName}] - Execution Time: ${executionTimeText} s`;
 
 			const resultText = formatPerformanceResult(executionTime, functionName);
 
