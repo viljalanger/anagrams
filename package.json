@@ -1,6 +1,8 @@
 {
+	"author": "Yiyi Chen",
+	"email": "chen.yiyi@hotmail.it",
 	"name": "anagrams",
-	"version": "0.0.0",
+	"version": "1.0.0",
 	"license": "MIT",
 	"description": "",
 	"main": "dist/main.js",
@@ -18,9 +20,9 @@
 		"eslint:fix": "npm run eslint --fix",
 		"prettier": "prettier \"**/*.ts\"",
 		"prettier:fix": "npm run prettier --write",
-		"check-up": "npm run prettier:fix && npm run eslint:fix && npm run coverage && npm run build && npm run build:staging"
+		"check-up": "npm run prettier:fix && npm run eslint:fix && npm run coverage && npm run build && npm run build:staging",
+		"clean": "rimraf ./coverage && rimraf ./dev && rimraf ./dist && rimraf ./tmp && rimraf ./node_modules && npm ci"
 	},
-	"author": "Yiyi Chen",
 	"devDependencies": {
 		"@types/app-root-path": "^1.2.4",
 		"@types/jest": "^26.0.19",
