@@ -52,19 +52,19 @@ describe('LoggerService', () => {
 			sut.logStackTrace(exception);
 
 			expect(loggerMock.silly).toHaveBeenCalledTimes(1);
-			expect(loggerMock.silly).toHaveBeenCalledWith(sillyMessage, [sillyArgs]);
+			expect(loggerMock.silly).toHaveBeenCalledWith(sillyMessage, sillyArgs);
 
 			expect(loggerMock.trace).toHaveBeenCalledTimes(1);
-			expect(loggerMock.trace).toHaveBeenCalledWith(traceMessage, [traceArgs]);
+			expect(loggerMock.trace).toHaveBeenCalledWith(traceMessage, traceArgs);
 
 			expect(loggerMock.debug).toHaveBeenCalledTimes(2);
-			expect(loggerMock.debug).toHaveBeenNthCalledWith(1, debugMessage, [debugArgs]);
+			expect(loggerMock.debug).toHaveBeenNthCalledWith(1, debugMessage, debugArgs);
 
 			expect(loggerMock.info).toHaveBeenCalledTimes(1);
-			expect(loggerMock.info).toHaveBeenCalledWith(infoMessage, [infoArgs]);
+			expect(loggerMock.info).toHaveBeenCalledWith(infoMessage, infoArgs);
 
 			expect(loggerMock.warn).toHaveBeenCalledTimes(1);
-			expect(loggerMock.warn).toHaveBeenCalledWith(warnMessage, [warnArgs]);
+			expect(loggerMock.warn).toHaveBeenCalledWith(warnMessage, warnArgs);
 
 			expect(loggerMock.debug).toHaveBeenCalledTimes(2);
 			expect(loggerMock.debug).toHaveBeenNthCalledWith(2, exception);

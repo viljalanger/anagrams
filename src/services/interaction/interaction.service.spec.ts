@@ -47,7 +47,7 @@ describe('InteractionService', () => {
 
 			await sut.ask(question);
 
-			expect(loggerServiceMock.silly).toHaveBeenCalledWith('About to ask questions', [question]);
+			expect(loggerServiceMock.debug).toHaveBeenCalledWith('About to ask questions', [question]);
 			expect(prompts).toHaveBeenCalledWith([question]);
 		});
 
@@ -59,7 +59,7 @@ describe('InteractionService', () => {
 
 			await sut.ask(...questions);
 
-			expect(loggerServiceMock.silly).toHaveBeenCalledWith('About to ask questions', [...questions]);
+			expect(loggerServiceMock.debug).toHaveBeenCalledWith('About to ask questions', [...questions]);
 			expect(prompts).toHaveBeenCalledWith(questions);
 		});
 	});

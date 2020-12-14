@@ -5,30 +5,29 @@ import { LoggerKey } from '@anagrams/injector';
 import { Exception } from '@anagrams/models';
 
 import { ILoggerService } from '../interfaces/logger.interface';
-import { objectContainsKey } from 'jest-mock-extended';
 
 @injectable()
 export class LoggerService implements ILoggerService {
 	@inject(LoggerKey) private readonly logger!: Logger;
 
-	silly(message: string, ...args: unknown[]): void {
-		this.logger.silly(message, this.handleArgs(args));
+	silly(...args: unknown[]): void {
+		this.logger.silly(...args);
 	}
 
-	trace(message: string, ...args: unknown[]): void {
-		this.logger.trace(message, this.handleArgs(args));
+	trace(...args: unknown[]): void {
+		this.logger.trace(...args);
 	}
 
-	debug(message: string, ...args: unknown[]): void {
-		this.logger.debug(message, this.handleArgs(args));
+	debug(...args: unknown[]): void {
+		this.logger.debug(...args);
 	}
 
-	info(message: string, ...args: unknown[]): void {
-		this.logger.info(message, this.handleArgs(args));
+	info(...args: unknown[]): void {
+		this.logger.info(...args);
 	}
 
-	warn(message: string, ...args: unknown[]): void {
-		this.logger.warn(message, this.handleArgs(args));
+	warn(...args: unknown[]): void {
+		this.logger.warn(...args);
 	}
 
 	error(message: string, exeception?: Exception): void {
@@ -41,11 +40,5 @@ export class LoggerService implements ILoggerService {
 
 	logStackTrace(exeception: Exception): void {
 		this.logger.debug(exeception);
-	}
-
-	private handleArgs(args: unknown[]): unknown[] | undefined {
-		const isUndefined = args.length === 1 && Object.keys(args).length === 0;
-
-		return isUndefined ? undefined : args;
 	}
 }
