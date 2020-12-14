@@ -8,6 +8,9 @@ const IConfigServiceKey = 'IConfigService';
 
 const LoggerKey = 'Logger';
 const performanceKey = 'performance';
+const promisesKey = 'promisesKey';
+const createReadStreamKey = 'createReadStream';
+const createReadLineInterfaceKey = 'createReadLineInterface';
 
 export {
 	IAnagramsProgramServiceKey,
@@ -19,4 +22,7 @@ export {
 	IConfigServiceKey,
 	LoggerKey,
 	performanceKey,
+	promisesKey,
+	createReadStreamKey,
+	createReadLineInterfaceKey,
 };

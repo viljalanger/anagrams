@@ -1,3 +1,5 @@
+import { createInterface as createReadLineInterface } from 'readline';
+import { promises, createReadStream } from 'fs';
 import { performance, Performance } from 'perf_hooks';
 import { Container, ContainerModule } from 'inversify';
 import { Logger } from 'tslog';
@@ -22,6 +24,8 @@ import {
 import { LoggerFactory } from '@anagrams/factories';
 
 import {
+	createReadLineInterfaceKey,
+	createReadStreamKey,
 	IAnagramsProgramServiceKey,
 	IConfigServiceKey,
 	IDictionaryServiceKey,
@@ -31,6 +35,7 @@ import {
 	IPerformanceServiceKey,
 	LoggerKey,
 	performanceKey,
+	promisesKey,
 } from './type-keys';
 
 export class Injector {
@@ -73,6 +78,9 @@ export class Injector {
 		return new ContainerModule((bind) => {
 			bind<Logger>(LoggerKey).toConstantValue(logger);
 			bind<Performance>(performanceKey).toConstantValue(performance);
+			bind(promisesKey).toConstantValue(promises);
+			bind(createReadStreamKey).toConstantValue(createReadStream);
+			bind(createReadLineInterfaceKey).toConstantValue(createReadLineInterface);
 		});
 	}
 }

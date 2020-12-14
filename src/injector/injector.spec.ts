@@ -43,9 +43,9 @@ describe('Injector container', () => {
 	});
 
 	it('should return always the same instance of the container', () => {
-		const sutanotherContainer = Injector.getContainer();
+		const anotherContainer = Injector.getContainer();
 
-		expect(sut).toEqual(sutanotherContainer);
+		expect(sut).toEqual(anotherContainer);
 	});
 
 	it('should return always the same instance of a class', () => {

@@ -8,24 +8,35 @@ import { IConfigService } from 'src';
 import { ILogObject, Logger } from 'tslog';
 
 export class LoggerFactory {
+	private static logger: Logger;
+
 	private static rootPath: string;
 
 	static createLogger(configService: IConfigService): Logger {
-		const env = configService.getEnv();
-		const isDev = env === 'dev';
-		const isStaging = env === 'staging';
-		this.rootPath = isDev ? process.cwd() : __dirname;
+		if (!this.logger) {
+			const env = configService.getEnv();
+			const isDev = env === 'dev';
+			const isStaging = env === 'staging';
+			this.rootPath = isDev ? process.cwd() : __dirname;
 
-		const logger = new Logger({
-			displayFilePath: 'hidden',
-			minLevel: isDev ? 'silly' : isStaging ? 'debug' : 'info',
-			...configService.getTSLogSettings(),
-		});
+			this.logger = new Logger({
+				displayFilePath: 'hidden',
+				minLevel: isDev ? 'silly' : isStaging ? 'debug' : 'info',
+				...configService.getTSLogSettings(),
+			});
 
-		const fileTransport = this.getFileTransport(configService);
-		this.bindTransport(logger, fileTransport);
+			const fileTransport = this.getFileTransport(configService);
+			this.bindTransport(this.logger, fileTransport);
+		}
 
-		return logger;
+		return this.logger;
+	}
+
+	private static getMostRecentFile(logsDirectoryPath: string) {
+		const files = this.orderByRecentFile(logsDirectoryPath);
+		const filename = files.length ? files[0].file : undefined;
+
+		return filename ? path.resolve(this.rootPath, filename) : undefined;
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -39,13 +50,6 @@ export class LoggerFactory {
 			.sort((a, b) => b.mtime.getTime() - a.mtime.getTime());
 	}
 
-	private static getMostRecentFile(logsDirectoryPath: string) {
-		const files = this.orderByRecentFile(logsDirectoryPath);
-		const filename = files.length ? files[0].file : undefined;
-
-		return filename ? path.resolve(this.rootPath, filename) : undefined;
-	}
-
 	private static getFileTransport(configService: IConfigService): (logObject: ILogObject) => void {
 		return (logObject: ILogObject) => {
 			let currentLogFilePath: string | undefined;
@@ -57,11 +61,7 @@ export class LoggerFactory {
 
 			currentLogFilePath = this.getMostRecentFile(logsDirectoryPath);
 			if (currentLogFilePath) {
-				const { ctime, size } = lstatSync(currentLogFilePath);
-				const { maxDaysLogFileAge, maxMBLogFileSize } = configService.getFileTransportSettings();
-
-				const tooBig = size >= maxMBLogFileSize * 1024 * 1024;
-				const tooOld = this.getDaysAge(ctime) >= maxDaysLogFileAge;
+				const { tooBig, tooOld } = LoggerFactory.checkLogFileStatus(currentLogFilePath, configService);
 
 				if (tooBig || tooOld) {
 					currentLogFilePath = this.createNewLogFile(currentLogFilePath, logsDirectoryPath);
@@ -69,12 +69,22 @@ export class LoggerFactory {
 			} else {
 				currentLogFilePath = this.createNewLogFile(currentLogFilePath, logsDirectoryPath);
 			}
+
 			const message = `${JSON.stringify(logObject)}\n`;
 			appendFileSync(currentLogFilePath, message);
 		};
 	}
 
-	private static getDaysAge(creationDate: Date): number {
+	private static checkLogFileStatus(currentLogFilePath: string, configService: IConfigService) {
+		const { ctime, size } = lstatSync(currentLogFilePath);
+		const { maxDaysLogFileAge, maxMBLogFileSize } = configService.getFileTransportSettings();
+
+		const tooBig = size >= maxMBLogFileSize * 1024 * 1024;
+		const tooOld = this.getFileAgeInDays(ctime) >= maxDaysLogFileAge;
+		return { tooBig, tooOld };
+	}
+
+	private static getFileAgeInDays(creationDate: Date): number {
 		const timestamp = Date.now() - creationDate.getTime();
 
 		return timestamp / (1000 * 60 * 60 * 24);
