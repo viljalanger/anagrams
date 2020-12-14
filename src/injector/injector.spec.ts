@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { Container } from 'inversify';
 import { Logger } from 'tslog';
 
@@ -49,10 +51,44 @@ describe('Injector container', () => {
 	});
 
 	it('should return always the same instance of a class', () => {
-		const firstInstance = sut.get<IAnagramsProgramService>(IAnagramsProgramServiceKey);
-		const secondInstance = sut.get<IAnagramsProgramService>(IAnagramsProgramServiceKey);
+		const instances: Map<string, any[]> = new Map();
+		instances.set(IAnagramsProgramServiceKey, [
+			sut.get<IAnagramsProgramService>(IAnagramsProgramServiceKey),
+			sut.get<IAnagramsProgramService>(IAnagramsProgramServiceKey),
+		]);
+		instances.set(IConfigServiceKey, [
+			sut.get<IConfigService>(IConfigServiceKey),
+			sut.get<IConfigService>(IConfigServiceKey),
+		]);
+		instances.set(IDictionaryServiceKey, [
+			sut.get<IDictionaryService>(IDictionaryServiceKey),
+			sut.get<IDictionaryService>(IDictionaryServiceKey),
+		]);
+		instances.set(IFilesServiceKey, [
+			sut.get<IFilesService>(IFilesServiceKey),
+			sut.get<IFilesService>(IFilesServiceKey),
+		]);
+		instances.set(IInteractionServiceKey, [
+			sut.get<IInteractionService>(IInteractionServiceKey),
+			sut.get<IInteractionService>(IInteractionServiceKey),
+		]);
+		instances.set(ILoggerServiceKey, [
+			sut.get<ILoggerService>(ILoggerServiceKey),
+			sut.get<ILoggerService>(ILoggerServiceKey),
+		]);
+		instances.set(IPerformanceServiceKey, [
+			sut.get<IPerformanceService>(IPerformanceServiceKey),
+			sut.get<IPerformanceService>(IPerformanceServiceKey),
+		]);
+		instances.set(LoggerKey, [sut.get<Logger>(LoggerKey), sut.get<Logger>(LoggerKey)]);
 
-		expect(firstInstance).toEqual(secondInstance);
+		const instanceKeys: string[] = Array.from(instances.keys());
+
+		instanceKeys.map((key: string) => {
+			const pair = instances.get(key) as any[];
+
+			expect(pair[0]).toEqual(pair[1]);
+		});
 	});
 
 	it('should return correct dependencies', () => {
