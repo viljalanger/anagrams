@@ -41,10 +41,8 @@ export class DictionaryService implements IDictionaryService {
 	}
 
 	private findMatchingKeys(term: string, caseSensitive?: boolean, matchAllChars?: boolean): string[] {
-		const matchingKeys: string[] = [];
-
 		const keys = Array.from(this.dictionary.keys());
-		keys.forEach((key: string) => {
+		return keys.filter((key: string) => {
 			let compareKey: string = caseSensitive ? key.valueOf() : key.valueOf().toLowerCase();
 
 			let partialMatch = false;
@@ -55,11 +53,8 @@ export class DictionaryService implements IDictionaryService {
 
 			compareKey = sortText(compareKey);
 			term = sortText(term);
-			if (compareKey === term || partialMatch) {
-				matchingKeys.push(key);
-			}
-		});
 
-		return matchingKeys;
+			return compareKey === term || partialMatch;
+		});
 	}
 }
