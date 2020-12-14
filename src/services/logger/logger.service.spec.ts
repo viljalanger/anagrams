@@ -33,32 +33,38 @@ describe('LoggerService', () => {
 			const sillyMessage = 'I am the silly log message';
 			const traceMessage = 'I am the trace log message';
 			const debugMessage = 'I am the debug log message';
-			const debugArgs = 'I am the debug args log message';
 			const infoMessage = 'I am the info log message';
 			const warnMessage = 'I am the warn log message';
+
+			const sillyArgs = 'I am the silly args log message';
+			const traceArgs = 'I am the trace args log message';
+			const debugArgs = 'I am the debug args log message';
+			const infoArgs = 'I am the info args log message';
+			const warnArgs = 'I am the warn args log message';
+
 			const exception = new Exception('I am the fatal exception');
 
-			sut.silly(sillyMessage);
-			sut.trace(traceMessage);
+			sut.silly(sillyMessage, sillyArgs);
+			sut.trace(traceMessage, traceArgs);
 			sut.debug(debugMessage, debugArgs);
-			sut.info(infoMessage);
-			sut.warn(warnMessage);
+			sut.info(infoMessage, infoArgs);
+			sut.warn(warnMessage, warnArgs);
 			sut.logStackTrace(exception);
 
 			expect(loggerMock.silly).toHaveBeenCalledTimes(1);
-			expect(loggerMock.silly).toHaveBeenCalledWith(sillyMessage);
+			expect(loggerMock.silly).toHaveBeenCalledWith(sillyMessage, [sillyArgs]);
 
 			expect(loggerMock.trace).toHaveBeenCalledTimes(1);
-			expect(loggerMock.trace).toHaveBeenCalledWith(traceMessage);
+			expect(loggerMock.trace).toHaveBeenCalledWith(traceMessage, [traceArgs]);
 
 			expect(loggerMock.debug).toHaveBeenCalledTimes(2);
 			expect(loggerMock.debug).toHaveBeenNthCalledWith(1, debugMessage, [debugArgs]);
 
 			expect(loggerMock.info).toHaveBeenCalledTimes(1);
-			expect(loggerMock.info).toHaveBeenCalledWith(infoMessage);
+			expect(loggerMock.info).toHaveBeenCalledWith(infoMessage, [infoArgs]);
 
 			expect(loggerMock.warn).toHaveBeenCalledTimes(1);
-			expect(loggerMock.warn).toHaveBeenCalledWith(warnMessage);
+			expect(loggerMock.warn).toHaveBeenCalledWith(warnMessage, [warnArgs]);
 
 			expect(loggerMock.debug).toHaveBeenCalledTimes(2);
 			expect(loggerMock.debug).toHaveBeenNthCalledWith(2, exception);
