@@ -11,8 +11,15 @@ import {
 	Injector,
 } from '@anagrams/injector';
 
-import { askForTermQuestion, initQuestions, newSearchQuestion } from './program-questions';
-import { closingCommand, invalidTermCommand, matchNotFoundCommand } from './program-commands';
+import {
+	askForTermQuestion,
+	initQuestions,
+	newSearchQuestion,
+	closingCommand,
+	invalidTermCommand,
+	matchNotFoundCommand,
+} from './program-prompts';
+
 import { IAnagramsProgramService } from '../interfaces/anagrams-program.interface';
 import { IDictionaryService } from '../interfaces/dictionary.interface';
 import { IInteractionService } from '../interfaces/interaction.interface';

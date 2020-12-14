@@ -35,11 +35,12 @@ describe('PerformanceService', () => {
 	describe('measure', () => {
 		it('should log with debug correct given time', async () => {
 			const functionName = 'Unit test';
+			const expectedText = formatPerformanceResult(0, functionName);
 			const runMe = async (): Promise<void> => {
 				setTimeout(() => console.log('Test'), 3000);
 			};
+
 			nowSpy.mockReturnValue(5);
-			const expectedText = formatPerformanceResult(0, functionName);
 
 			await sut.measure(runMe, functionName);
 
