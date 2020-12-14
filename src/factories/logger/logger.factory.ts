@@ -54,10 +54,10 @@ export class LoggerFactory {
 
 			currentLogFilePath = this.getMostRecentFile(logsDirectoryPath);
 			if (currentLogFilePath) {
-				const { atimeMs, size } = lstatSync(currentLogFilePath);
-				const { maxLogFileAge, maxLogFileSize } = configService.getFileTransportSettings();
+				const { ctime, size } = lstatSync(currentLogFilePath);
+				const { maxDaysLogFileAge, maxMBLogFileSize } = configService.getFileTransportSettings();
 
-				const tooBig = size >= maxLogFileSize * 1024;
+				const tooBig = size >= maxMBLogFileSize * 1024 * 1024;
 
 				if (tooBig) {
 					currentLogFilePath = this.createNewLogFile(currentLogFilePath, logsDirectoryPath);

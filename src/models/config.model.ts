@@ -11,8 +11,8 @@ export interface LoggerConfig {
 
 export interface FileTransportSettings {
 	logsPath: string;
-	maxLogFileSize: number;
-	maxLogFileAge: number;
+	maxMBLogFileSize: number;
+	maxDaysLogFileAge: number;
 }
 
 export interface TSLogSettings {
