@@ -1,5 +1,5 @@
 const IAnagramsProgramServiceKey = 'IAnagramsProgramService';
-const IDictionaryServiceKkey = 'IDictionaryService';
+const IDictionaryServiceKey = 'IDictionaryService';
 const IFilesServiceKey = 'IFilesService';
 const IInteractionServiceKey = 'IInteractionService';
 const ILoggerServiceKey = 'ILoggerService';
@@ -11,7 +11,7 @@ const performanceKey = 'performance';
 
 export {
 	IAnagramsProgramServiceKey,
-	IDictionaryServiceKkey,
+	IDictionaryServiceKey,
 	IFilesServiceKey,
 	IInteractionServiceKey,
 	ILoggerServiceKey,

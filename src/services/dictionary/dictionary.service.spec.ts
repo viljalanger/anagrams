@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import { mock, mockReset, MockProxy } from 'jest-mock-extended';
 
-import { IDictionaryServiceKkey, IFilesServiceKey, Injector } from '@anagrams/injector';
+import { IDictionaryServiceKey, IFilesServiceKey, Injector } from '@anagrams/injector';
 
 import { IDictionaryService } from '../interfaces/dictionary.interface';
 import { IFilesService } from '../interfaces/files.interface';
@@ -20,7 +20,7 @@ describe('DictionaryService', () => {
 
 		container.rebind<IFilesService>(IFilesServiceKey).toConstantValue(filesServiceMock);
 
-		sut = container.get<IDictionaryService>(IDictionaryServiceKkey);
+		sut = container.get<IDictionaryService>(IDictionaryServiceKey);
 	});
 
 	afterEach(() => {
@@ -33,16 +33,18 @@ describe('DictionaryService', () => {
 
 	describe('read', () => {
 		it('should throw expected error when file does not exists', () => {
-			filesServiceMock.exists.calledWith(filePath).mockResolvedValue(false);
 			const existsResult = async () => await sut.read(filePath);
+
+			filesServiceMock.exists.calledWith(filePath).mockResolvedValue(false);
 
 			expect(existsResult).rejects.toThrow('File does not exist');
 		});
 
 		it('should throw expected error when path does not point to a file', () => {
+			const existsResult = async () => await sut.read(filePath);
+
 			filesServiceMock.exists.calledWith(filePath).mockResolvedValue(true);
 			filesServiceMock.isFile.calledWith(filePath).mockResolvedValue(false);
-			const existsResult = async () => await sut.read(filePath);
 
 			expect(existsResult).rejects.toThrow('Cannot read something different from a file');
 		});
@@ -51,6 +53,7 @@ describe('DictionaryService', () => {
 			const receivedArray: string[] = ['$', '$$', '%'];
 			const expectedDictionary = new Map<string, string>();
 			receivedArray.map((item: string) => expectedDictionary.set(item, item));
+
 			filesServiceMock.exists.calledWith(filePath).mockResolvedValue(true);
 			filesServiceMock.isFile.calledWith(filePath).mockResolvedValue(true);
 			filesServiceMock.readAllLines.calledWith(filePath).mockResolvedValue(receivedArray);

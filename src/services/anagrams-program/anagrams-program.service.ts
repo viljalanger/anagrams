@@ -3,7 +3,7 @@ import { inject, injectable } from 'inversify';
 
 import { InvalidInputException, SearchOptions } from '@anagrams/models';
 import { formatResults } from '@anagrams/utils';
-import { IDictionaryServiceKkey, IInteractionServiceKey, IPerformanceServiceKey } from '@anagrams/injector';
+import { IDictionaryServiceKey, IInteractionServiceKey, IPerformanceServiceKey } from '@anagrams/injector';
 
 import {
 	askForTermQuestion,
@@ -22,11 +22,13 @@ import { IPerformanceService } from '../interfaces/performance.interface';
 @injectable()
 export class AnagramsProgramService implements IAnagramsProgramService {
 	@inject(IInteractionServiceKey) private readonly interactionService!: IInteractionService;
-	@inject(IDictionaryServiceKkey) private readonly disctionaryService!: IDictionaryService;
+	@inject(IDictionaryServiceKey) private readonly disctionaryService!: IDictionaryService;
 	@inject(IPerformanceServiceKey) private readonly performanceService!: IPerformanceService;
 
 	private _searchOptions!: SearchOptions;
 	private _continue = true;
+
+	private cache: Map<string, string[]> = new Map();
 
 	get searchOptions(): SearchOptions {
 		return this._searchOptions;
@@ -62,25 +64,48 @@ export class AnagramsProgramService implements IAnagramsProgramService {
 				throw new InvalidInputException(`Entered input is invalid: [${term}]`);
 			}
 
-			this.interactionService.say('Searching for matching words, please wait...');
-			const searchFunction = async (): Promise<string[]> => {
-				return await this.disctionaryService.search(term, this.searchOptions);
-			};
-			const searchResults: string[] = await this.performanceService.measure<string[]>(
-				searchFunction,
-				'Search term',
-			);
+			const termCopy = term.valueOf();
+			const cached = this.cache.has(term);
+			const searchResults: string[] = await this.search(cached, termCopy, term);
 
-			if (searchResults && searchResults.length > 0) {
-				await this.interactionService.say(formatResults(searchResults));
-			} else {
-				await this.interactionService.say(matchNotFoundCommand);
-			}
+			this.cache.set(termCopy, searchResults);
+
+			await this.printResults(searchResults, cached);
 
 			const { doNewSearch } = await this.interactionService.ask(newSearchQuestion);
 			this._continue = doNewSearch;
 		}
 
 		await this.interactionService.say(closingCommand);
+	}
+
+	private async search(cached: boolean, termCopy: string, term: string) {
+		const searchFunction = async (): Promise<string[]> => {
+			this.interactionService.say('Searching for matching words, please wait...');
+
+			if (cached) {
+				return this.cache.get(termCopy) as string[];
+			}
+
+			return await this.disctionaryService.search(term, this.searchOptions);
+		};
+		const searchResults: string[] = await this.performanceService.measure<string[]>(
+			searchFunction,
+			`Search term${cached ? ' cached' : ''}`,
+		);
+		return searchResults;
+	}
+
+	private async printResults(searchResults: string[], cached: boolean) {
+		if (searchResults && searchResults.length > 0) {
+			await this.interactionService.say(formatResults(searchResults));
+			await this.interactionService.say(
+				`Number of found entries: ${searchResults.length}${cached ? ', cached results' : ''}`,
+			);
+
+			return;
+		}
+
+		await this.interactionService.say(matchNotFoundCommand);
 	}
 }

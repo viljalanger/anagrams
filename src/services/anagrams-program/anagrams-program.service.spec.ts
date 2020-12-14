@@ -6,7 +6,7 @@ import { InvalidInputException, Question } from '@anagrams/models';
 
 import {
 	IAnagramsProgramServiceKey,
-	IDictionaryServiceKkey,
+	IDictionaryServiceKey,
 	IInteractionServiceKey,
 	Injector,
 } from '@anagrams/injector';
@@ -36,7 +36,7 @@ describe('AnagramsProgramService', () => {
 		dictionaryServiceMock = mock<IDictionaryService>();
 
 		container.rebind<IInteractionService>(IInteractionServiceKey).toConstantValue(interactionServiceMock);
-		container.rebind<IDictionaryService>(IDictionaryServiceKkey).toConstantValue(dictionaryServiceMock);
+		container.rebind<IDictionaryService>(IDictionaryServiceKey).toConstantValue(dictionaryServiceMock);
 
 		sut = container.get<IAnagramsProgramService>(IAnagramsProgramServiceKey);
 	});
@@ -156,6 +156,31 @@ describe('AnagramsProgramService', () => {
 
 			expect(sut.continue).toEqual(newSearchAnswer.doNewSearch);
 			expect(interactionServiceMock.say).lastCalledWith(closingCommand);
+		});
+
+		it('should use the cache instead of searching for the term when it has been already searched ', async () => {
+			const searchResults = ['Cab', 'aBc', 'CbA'];
+			const termAnswer = { term: 'a' };
+			const newSearchAnswerYes = { doNewSearch: true };
+			const newSearchAnswerNo = { doNewSearch: false };
+			const searchOptions = sut.searchOptions;
+
+			interactionServiceMock.ask.calledWith(askForTermQuestion).mockResolvedValue(termAnswer);
+			interactionServiceMock.ask
+				.calledWith(newSearchQuestion)
+				.mockResolvedValue(newSearchAnswerNo)
+				.mockResolvedValueOnce(newSearchAnswerYes);
+
+			dictionaryServiceMock.search
+				.calledWith(termAnswer.term, searchOptions)
+				.mockResolvedValue(searchResults);
+
+			await sut.run();
+
+			expect(dictionaryServiceMock.search).toHaveReturnedTimes(1);
+			expect(interactionServiceMock.say).toHaveBeenCalledWith(
+				`Number of found entries: ${searchResults.length}, cached results`,
+			);
 		});
 	});
 });

@@ -24,7 +24,7 @@ import { LoggerFactory } from '@anagrams/factories';
 import {
 	IAnagramsProgramServiceKey,
 	IConfigServiceKey,
-	IDictionaryServiceKkey,
+	IDictionaryServiceKey,
 	IFilesServiceKey,
 	IInteractionServiceKey,
 	ILoggerServiceKey,
@@ -58,7 +58,7 @@ export class Injector {
 	private static getApplicationDependencies(): ContainerModule {
 		return new ContainerModule((bind) => {
 			bind<IFilesService>(IFilesServiceKey).to(FilesService);
-			bind<IDictionaryService>(IDictionaryServiceKkey).to(DictionaryService);
+			bind<IDictionaryService>(IDictionaryServiceKey).to(DictionaryService);
 			bind<IInteractionService>(IInteractionServiceKey).to(InteractionService);
 			bind<IAnagramsProgramService>(IAnagramsProgramServiceKey).to(AnagramsProgramService);
 			bind<ILoggerService>(ILoggerServiceKey).to(LoggerService);

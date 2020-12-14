@@ -21,7 +21,7 @@ import {
 import {
 	IAnagramsProgramServiceKey,
 	IConfigServiceKey,
-	IDictionaryServiceKkey,
+	IDictionaryServiceKey,
 	IFilesServiceKey,
 	IInteractionServiceKey,
 	ILoggerServiceKey,
@@ -58,7 +58,7 @@ describe('Injector container', () => {
 	it('should return correct dependencies', () => {
 		const anagramsService = sut.get<IAnagramsProgramService>(IAnagramsProgramServiceKey);
 		const configService = sut.get<IConfigService>(IConfigServiceKey);
-		const dictionaryService = sut.get<IDictionaryService>(IDictionaryServiceKkey);
+		const dictionaryService = sut.get<IDictionaryService>(IDictionaryServiceKey);
 		const filesService = sut.get<IFilesService>(IFilesServiceKey);
 		const interactionService = sut.get<IInteractionService>(IInteractionServiceKey);
 		const loggerService = sut.get<ILoggerService>(ILoggerServiceKey);
