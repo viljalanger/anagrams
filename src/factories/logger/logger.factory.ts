@@ -8,10 +8,13 @@ import { IConfigService } from 'src';
 import { ILogObject, Logger } from 'tslog';
 
 export class LoggerFactory {
+	private static rootPath: string;
+
 	static createLogger(configService: IConfigService): Logger {
 		const env = configService.getEnv();
 		const isDev = env === 'dev';
 		const isStaging = env === 'staging';
+		this.rootPath = isDev ? process.cwd() : __dirname;
 
 		const logger = new Logger({
 			displayFilePath: 'hidden',
@@ -40,13 +43,13 @@ export class LoggerFactory {
 		const files = this.orderByRecentFile(logsDirectoryPath);
 		const filename = files.length ? files[0].file : undefined;
 
-		return filename ? path.resolve(process.cwd(), filename) : undefined;
+		return filename ? path.resolve(this.rootPath, filename) : undefined;
 	}
 
 	private static getFileTransport(configService: IConfigService): (logObject: ILogObject) => void {
 		return (logObject: ILogObject) => {
 			let currentLogFilePath: string | undefined;
-			const logsDirectoryPath = path.resolve(process.cwd(), configService.getLogsPath());
+			const logsDirectoryPath = path.resolve(this.rootPath, configService.getLogsPath());
 
 			if (!existsSync(logsDirectoryPath)) {
 				mkdirSync(logsDirectoryPath, { recursive: true });
