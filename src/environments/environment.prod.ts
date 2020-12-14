@@ -2,10 +2,11 @@ export const environment = {
 	env: 'prod',
 	dictionaryPath: 'assets/wordlist.txt',
 	logger: {
-		logsPath: 'LOGS',
-		maxLogFileSize: 5120,
-		maxLogFileAge: 3,
-		minLog: 0,
+		fileTransportSettings: {
+			logsPath: 'LOGS',
+			maxLogFileSize: 5120,
+			maxLogFileAge: 3,
+		},
 		tsLogSettings: {
 			displayDateTime: false,
 			displayFunctionName: false,

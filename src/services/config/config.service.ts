@@ -26,7 +26,7 @@ export class ConfigService implements IConfigService {
 	}
 
 	getLogsPath(): string {
-		return this.environment.logger.logsPath;
+		return this.environment.logger.fileTransportSettings.logsPath;
 	}
 
 	getTSLogSettings(): TSLogSettings {

@@ -2,10 +2,11 @@ export const environment = {
 	env: 'staging',
 	dictionaryPath: 'assets/wordlist.txt',
 	logger: {
-		logsPath: 'LOGS',
-		maxLogFileSize: 5120,
-		maxLogFileAge: 3,
-		minLog: 0,
+		fileTransportSettings: {
+			logsPath: 'LOGS',
+			maxLogFileSize: 512,
+			maxLogFileAge: 1,
+		},
 		tsLogSettings: {
 			displayDateTime: false,
 			displayFunctionName: false,

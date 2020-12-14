@@ -5,10 +5,14 @@ export interface Config {
 }
 
 export interface LoggerConfig {
+	fileTransportSettings: FileTransportSettings;
+	tsLogSettings: TSLogSettings;
+}
+
+export interface FileTransportSettings {
 	logsPath: string;
 	maxLogFileSize: number;
 	maxLogFileAge: number;
-	tsLogSettings: TSLogSettings;
 }
 
 export interface TSLogSettings {
