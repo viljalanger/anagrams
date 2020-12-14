@@ -85,6 +85,7 @@ export class LoggerFactory {
 		currentLogFilePath = path.resolve(logsDirectoryPath, `${timestamp}_Anagrams.log`);
 
 		closeSync(openSync(currentLogFilePath, 'w'));
+
 		return currentLogFilePath;
 	}
 
