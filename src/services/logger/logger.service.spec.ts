@@ -38,12 +38,13 @@ describe('LoggerService', () => {
 			const sillyMessage = 'I am the silly log message';
 			const traceMessage = 'I am the trace log message';
 			const debugMessage = 'I am the debug log message';
+			const debugArgs = 'I am the debug args log message';
 			const infoMessage = 'I am the info log message';
 			const warnMessage = 'I am the warn log message';
 
 			sut.silly(sillyMessage);
 			sut.trace(traceMessage);
-			sut.debug(debugMessage);
+			sut.debug(debugMessage, debugArgs);
 			sut.info(infoMessage);
 			sut.warn(warnMessage);
 
@@ -54,7 +55,7 @@ describe('LoggerService', () => {
 			expect(loggerMock.trace).toHaveBeenCalledWith(traceMessage);
 
 			expect(loggerMock.debug).toHaveBeenCalledTimes(1);
-			expect(loggerMock.debug).toHaveBeenCalledWith(debugMessage);
+			expect(loggerMock.debug).toHaveBeenCalledWith(debugMessage, [debugArgs]);
 
 			expect(loggerMock.info).toHaveBeenCalledTimes(1);
 			expect(loggerMock.info).toHaveBeenCalledWith(infoMessage);

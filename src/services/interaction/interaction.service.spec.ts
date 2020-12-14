@@ -42,15 +42,16 @@ describe('InteractionService', () => {
 	});
 
 	describe('ask', () => {
-		it('should call prompts with expected question object', async () => {
+		it('should log question call prompts with expected question object', async () => {
 			const question: Question = { type: 'text', name: 'name', message: 'What is your name?' };
 
 			await sut.ask(question);
 
+			expect(loggerServiceMock.debug).toHaveBeenCalledWith('About to ask questions', [question]);
 			expect(prompts).toHaveBeenCalledWith([question]);
 		});
 
-		it('should call prompts with expected questions array', async () => {
+		it('should log questions call prompts with expected questions array', async () => {
 			const questions: Question[] = [
 				{ type: 'text', name: 'name', message: 'What is your name?' },
 				{ type: 'text', name: 'surname', message: 'What is your surname?' },
@@ -58,6 +59,7 @@ describe('InteractionService', () => {
 
 			await sut.ask(...questions);
 
+			expect(loggerServiceMock.debug).toHaveBeenCalledWith('About to ask questions', [...questions]);
 			expect(prompts).toHaveBeenCalledWith(questions);
 		});
 	});

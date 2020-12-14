@@ -18,7 +18,11 @@ export class InteractionService implements IInteractionService {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	async ask(...args: Question[]): Promise<Answers<any>> {
 		try {
-			return await prompts(args);
+			this.loggerService.debug('About to ask questions', args);
+			const answers = await prompts(args);
+			this.loggerService.debug('User answers', answers);
+
+			return answers;
 		} catch (exeception) {
 			this.loggerService.fatal(exeception);
 

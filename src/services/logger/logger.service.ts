@@ -20,8 +20,8 @@ export class LoggerService implements ILoggerService {
 		this.logger.trace(message);
 	}
 
-	debug(message: string): void {
-		this.logger.debug(message);
+	debug(message: string, ...args: unknown[]): void {
+		this.logger.debug(message, args);
 	}
 
 	info(message: string): void {
