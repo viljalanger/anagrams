@@ -1,7 +1,7 @@
 import { injectable } from 'inversify';
 
 import { environment } from '@anagrams/environment';
-import { env, TSLogSettings } from '@anagrams/models';
+import { env, FileTransportSettings, TSLogSettings } from '@anagrams/models';
 
 import { IConfigService } from '../interfaces/config.interface';
 
@@ -31,5 +31,9 @@ export class ConfigService implements IConfigService {
 
 	getTSLogSettings(): TSLogSettings {
 		return this.environment.logger.tsLogSettings;
+	}
+
+	getFileTransportSettings(): FileTransportSettings {
+		return this.environment.logger.fileTransportSettings;
 	}
 }

@@ -40,29 +40,42 @@ export class LoggerFactory {
 		const files = this.orderByRecentFile(logsDirectoryPath);
 		const filename = files.length ? files[0].file : undefined;
 
-		return filename ? path.resolve(__dirname, filename) : undefined;
+		return filename ? path.resolve(process.cwd(), filename) : undefined;
 	}
 
 	private static getFileTransport(configService: IConfigService): (logObject: ILogObject) => void {
 		return (logObject: ILogObject) => {
 			let currentLogFilePath: string | undefined;
-			const logsDirectoryPath = path.resolve(__dirname, configService.getLogsPath());
+			const logsDirectoryPath = path.resolve(process.cwd(), configService.getLogsPath());
 
 			if (!existsSync(logsDirectoryPath)) {
 				mkdirSync(logsDirectoryPath, { recursive: true });
 			}
 
 			currentLogFilePath = this.getMostRecentFile(logsDirectoryPath);
-			if (!currentLogFilePath) {
-				const timestamp = moment().format('YYYYMMDD_HH-mm-ss');
-				currentLogFilePath = path.resolve(logsDirectoryPath, `${timestamp}_Anagrams.log`);
+			if (currentLogFilePath) {
+				const { atimeMs, size } = lstatSync(currentLogFilePath);
+				const { maxLogFileAge, maxLogFileSize } = configService.getFileTransportSettings();
 
-				closeSync(openSync(currentLogFilePath, 'w'));
+				const tooBig = size >= maxLogFileSize * 1024;
+
+				if (tooBig) {
+					currentLogFilePath = this.createNewLogFile(currentLogFilePath, logsDirectoryPath);
+				}
+			} else {
+				currentLogFilePath = this.createNewLogFile(currentLogFilePath, logsDirectoryPath);
 			}
-
 			const message = `${JSON.stringify(logObject)}\n`;
 			appendFileSync(currentLogFilePath, message);
 		};
+	}
+
+	private static createNewLogFile(currentLogFilePath: string | undefined, logsDirectoryPath: string) {
+		const timestamp = moment().format('YYYYMMDD_HH-mm-ss');
+		currentLogFilePath = path.resolve(logsDirectoryPath, `${timestamp}_Anagrams.log`);
+
+		closeSync(openSync(currentLogFilePath, 'w'));
+		return currentLogFilePath;
 	}
 
 	private static bindTransport(logger: Logger, transport: (logObject: ILogObject) => void): void {

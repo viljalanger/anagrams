@@ -4,7 +4,7 @@ export const environment = {
 	logger: {
 		fileTransportSettings: {
 			logsPath: 'dev/LOGS',
-			maxLogFileSize: 512,
+			maxLogFileSize: 5120,
 			maxLogFileAge: 1,
 		},
 		tsLogSettings: {

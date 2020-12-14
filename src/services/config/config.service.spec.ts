@@ -25,5 +25,6 @@ describe('ConfigService', () => {
 		expect(sut.getDictionaryPath()).toEqual(dictionaryPath);
 		expect(sut.getTSLogSettings()).toEqual(tsLogSettings);
 		expect(sut.getLogsPath()).toEqual(fileTransportSettings.logsPath);
+		expect(sut.getFileTransportSettings()).toEqual(fileTransportSettings);
 	});
 });

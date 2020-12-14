@@ -1,4 +1,4 @@
-import { env, TSLogSettings } from '@anagrams/models';
+import { env, TSLogSettings, FileTransportSettings } from '@anagrams/models';
 
 export interface IConfigService {
 	isProduction(): boolean;
@@ -6,4 +6,5 @@ export interface IConfigService {
 	getDictionaryPath(): string;
 	getLogsPath(): string;
 	getTSLogSettings(): TSLogSettings;
+	getFileTransportSettings(): FileTransportSettings;
 }
