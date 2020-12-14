@@ -19,6 +19,8 @@ import {
 	PerformanceService,
 } from '@anagrams/services';
 
+import { LoggerFactory } from '@anagrams/factories';
+
 import {
 	IAnagramsProgramServiceKey,
 	IConfigServiceKey,
@@ -30,6 +32,7 @@ import {
 	LoggerKey,
 	performanceKey,
 } from './type-keys';
+import { time } from 'console';
 
 export class Injector {
 	private static container: Container;
@@ -66,11 +69,7 @@ export class Injector {
 	}
 
 	private static getThirdPartyDependencies(configService: IConfigService): ContainerModule {
-		const logger = new Logger({
-			displayFilePath: 'hidden',
-			minLevel: configService.isProduction() ? 'info' : 'silly',
-			...configService.getTSLogSettings(),
-		});
+		const logger = LoggerFactory.createLogger(configService);
 
 		return new ContainerModule((bind) => {
 			bind<Logger>(LoggerKey).toConstantValue(logger);
