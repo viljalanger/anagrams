@@ -52,7 +52,7 @@ export class AnagramsProgramService implements IAnagramsProgramService {
 			if (!term) {
 				await this.interactionService.say(invalidTermCommand);
 
-				throw new InvalidInputException(`Entered input is invalid: ${term}`);
+				throw new InvalidInputException(`Entered input is invalid: [${term}]`);
 			}
 
 			this.interactionService.say('Searching for matching words, please wait...');

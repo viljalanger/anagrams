@@ -64,7 +64,7 @@ describe('AnagramsProgramService', () => {
 	describe('run', () => {
 		it('should print invalid term command and throw invalid input exception when input term is invalid', async () => {
 			const invalidTermAnswer = {};
-			const expectedException = new InvalidInputException('Entered input is invalid: undefined');
+			const expectedException = new InvalidInputException('Entered input is invalid: [undefined]');
 
 			interactionServiceMock.ask.calledWith(askForTermQuestion).mockResolvedValue(invalidTermAnswer);
 
