@@ -3,7 +3,12 @@ import { inject, injectable } from 'inversify';
 
 import { InvalidInputException, SearchOptions } from '@anagrams/models';
 import { formatResults } from '@anagrams/utils';
-import { IDictionaryServiceKey, IInteractionServiceKey, IPerformanceServiceKey } from '@anagrams/injector';
+import {
+	IConfigServiceKey,
+	IDictionaryServiceKey,
+	IInteractionServiceKey,
+	IPerformanceServiceKey,
+} from '@anagrams/injector';
 
 import {
 	askForTermQuestion,
@@ -18,12 +23,14 @@ import { IAnagramsProgramService } from '../interfaces/anagrams-program.interfac
 import { IDictionaryService } from '../interfaces/dictionary.interface';
 import { IInteractionService } from '../interfaces/interaction.interface';
 import { IPerformanceService } from '../interfaces/performance.interface';
+import { IConfigService } from '../interfaces/config.interface';
 
 @injectable()
 export class AnagramsProgramService implements IAnagramsProgramService {
 	@inject(IInteractionServiceKey) private readonly interactionService!: IInteractionService;
 	@inject(IDictionaryServiceKey) private readonly disctionaryService!: IDictionaryService;
 	@inject(IPerformanceServiceKey) private readonly performanceService!: IPerformanceService;
+	@inject(IConfigServiceKey) private readonly configService!: IConfigService;
 
 	private _searchOptions!: SearchOptions;
 	private _continue = true;
@@ -38,10 +45,11 @@ export class AnagramsProgramService implements IAnagramsProgramService {
 		return this._continue;
 	}
 
-	async init(dictionaryPath: string): Promise<void> {
+	async init(): Promise<void> {
 		this.interactionService.say('Welcome to the anagrams program!');
 		this.interactionService.say('Reading dictionary, please wait...');
 
+		const dictionaryPath = this.configService.getDictionaryPath();
 		const readDictionary = async () => await this.disctionaryService.read(dictionaryPath);
 		await this.performanceService.measure(readDictionary, 'Read dictionary');
 
@@ -50,7 +58,6 @@ export class AnagramsProgramService implements IAnagramsProgramService {
 		this.interactionService.say('Before starting, let me ask you a couple of questions');
 
 		const { caseSensitive, matchAllChars } = await this.interactionService.ask(...initQuestions);
-
 		this._searchOptions = { caseSensitive, matchAllChars };
 	}
 

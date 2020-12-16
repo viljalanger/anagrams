@@ -4,6 +4,6 @@ export interface IAnagramsProgramService {
 	searchOptions: SearchOptions;
 	continue: boolean;
 
-	init(dictionaryPath: string): Promise<void>;
+	init(): Promise<void>;
 	run(): Promise<void>;
 }

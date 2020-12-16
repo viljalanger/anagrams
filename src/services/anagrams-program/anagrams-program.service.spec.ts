@@ -6,6 +6,7 @@ import { InvalidInputException, Question } from '@anagrams/models';
 
 import {
 	IAnagramsProgramServiceKey,
+	IConfigServiceKey,
 	IDictionaryServiceKey,
 	IInteractionServiceKey,
 	Injector,
@@ -23,20 +24,24 @@ import {
 import { IAnagramsProgramService } from '../interfaces/anagrams-program.interface';
 import { IDictionaryService } from '../interfaces/dictionary.interface';
 import { IInteractionService } from '../interfaces/interaction.interface';
+import { IConfigService } from '../interfaces';
 
 describe('AnagramsProgramService', () => {
 	let sut: IAnagramsProgramService;
 	let interactionServiceMock: MockProxy<IInteractionService>;
 	let dictionaryServiceMock: MockProxy<IDictionaryService>;
+	let configServiceMock: MockProxy<IConfigService>;
 
 	const container = Injector.getContainer();
 
 	beforeEach(() => {
 		interactionServiceMock = mock<IInteractionService>();
 		dictionaryServiceMock = mock<IDictionaryService>();
+		configServiceMock = mock<IConfigService>();
 
 		container.rebind<IInteractionService>(IInteractionServiceKey).toConstantValue(interactionServiceMock);
 		container.rebind<IDictionaryService>(IDictionaryServiceKey).toConstantValue(dictionaryServiceMock);
+		container.rebind<IConfigService>(IConfigServiceKey).toConstantValue(configServiceMock);
 
 		sut = container.get<IAnagramsProgramService>(IAnagramsProgramServiceKey);
 	});
@@ -44,15 +49,18 @@ describe('AnagramsProgramService', () => {
 	afterEach(() => {
 		mockReset(interactionServiceMock);
 		mockReset(dictionaryServiceMock);
+		mockReset(configServiceMock);
 	});
 
 	describe('init', () => {
-		it('should call dictionary.read with expected parameter', async () => {
+		it('should call dictionary.read with parameter returned by configService', async () => {
 			const filePath = 'file/path.txt';
 			const initAnswers = { caseSensitive: true, matchAllChars: true };
-			interactionServiceMock.ask.calledWith(...initQuestions).mockResolvedValue(initAnswers);
 
-			await sut.init(filePath);
+			interactionServiceMock.ask.calledWith(...initQuestions).mockResolvedValue(initAnswers);
+			configServiceMock.getDictionaryPath.mockReturnValue(filePath);
+
+			await sut.init();
 
 			expect(dictionaryServiceMock.read).toHaveBeenCalledWith(filePath);
 		});
@@ -60,9 +68,11 @@ describe('AnagramsProgramService', () => {
 		it('should set searchOptions from init answers as expected', async () => {
 			const filePath = 'file/path.txt';
 			const initAnswers = { caseSensitive: false, matchAllChars: true };
-			interactionServiceMock.ask.calledWith(...initQuestions).mockResolvedValue(initAnswers);
 
-			await sut.init(filePath);
+			interactionServiceMock.ask.calledWith(...initQuestions).mockResolvedValue(initAnswers);
+			configServiceMock.getDictionaryPath.mockReturnValue(filePath);
+
+			await sut.init();
 
 			expect(sut.searchOptions).toEqual(initAnswers);
 		});
@@ -76,6 +86,7 @@ describe('AnagramsProgramService', () => {
 			interactionServiceMock.ask.calledWith(askForTermQuestion).mockResolvedValue(invalidTermAnswer);
 
 			await expect(sut.run()).rejects.toThrowError(expectedException);
+
 			expect(interactionServiceMock.say).toHaveBeenCalledWith(invalidTermCommand);
 		});
 
